@@ -1,0 +1,81 @@
+package product
+
+import (
+	"ivixlabs.com/proj5/api/web/components"
+	"ivixlabs.com/proj5/internal/product"
+	"ivixlabs.com/proj5/internal/validation/form"
+)
+
+templ ModalFormView(productForm *product.Form, formErrors *form.Errors, productId string) {
+	<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Product</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				@ProductFormView(productForm, formErrors, productId, false)
+			</div>
+		</div>
+	</div>
+	@modalBehavior()
+}
+
+script modalBehavior() {
+	const modal = new bootstrap.Modal('#productModal')
+        modal.show()
+        const eventListener = function() {
+            modal.hide()			
+            document.body.removeEventListener("CloseProductFormModal", eventListener)
+        }
+        document.body.addEventListener("CloseProductFormModal", eventListener)
+}
+
+templ ProductFormView(productForm *product.Form, formErrors *form.Errors, productId string, formDisabled bool) {
+	<form id="productForm" hx-post={ "/products/form?productId=" + productId } hx-swap="outerHTML" _="on submit toggle @disabled on #formFields">
+		<fieldset id="formFields" disabled?={ formDisabled }>
+			<div class="modal-body">
+				<div class="mb-3">
+					<label for="inputProductTitle" class="form-label">Title</label>
+					<input
+						type="text"
+						value={ productForm.Title }
+						class={ components.GetClass(formErrors.IsError("Title")) }
+						name="title"
+						id="inputProductTitle"
+					/>
+					@templ.Raw(components.GetErrorMessage(formErrors, "Title"))
+				</div>
+				<div class="mb-3">
+					<label for="inputProductBrand" class="form-label">Brand</label>
+					<input
+						type="text"
+						value={ productForm.Brand }
+						class={ components.GetClass(formErrors.IsError("Brand")) }
+						name="brand"
+						id="inputProductBrand"
+					/>
+					@templ.Raw(components.GetErrorMessage(formErrors, "Brand"))
+				</div>
+				<div class="mb-3">
+					<label for="inputProductPrice" class="form-label">Price</label>
+					<input
+						type="text"
+						value={ productForm.Price }
+						class={ components.GetClass(formErrors.IsError("Price")) }
+						name="price"
+						id="inputProductPrice"
+					/>
+					@templ.Raw(components.GetErrorMessage(formErrors, "Price"))
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary">
+					<span class="htmx-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+					Save
+				</button>
+			</div>
+		</fieldset>
+	</form>
+}

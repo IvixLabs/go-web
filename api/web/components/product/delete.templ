@@ -1,0 +1,56 @@
+package product
+
+templ DisabledButton() {
+	<button
+		disabled
+		class="btn btn-danger"
+	>
+		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+		Yes
+	</button>
+}
+
+templ ModalDeleteView(productId string) {
+	<div
+		class="modal fade"
+		id="productDeleteModal"
+		tabindex="-1"
+		aria-labelledby="exampleModalLabel"
+		aria-hidden="true"
+	>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Delete product</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					Are you sure to delete product?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+					<button
+						hx-swap="outerHTML"
+						hx-disabled-elt="this"
+						class="btn btn-danger"
+						hx-delete={ "/products/delete?productId=" + productId }
+					>
+						<span class="htmx-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+						Yes
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+    (function(){
+        const modal = new bootstrap.Modal('#productDeleteModal')
+        modal.show()
+        const eventListener = function() {
+                    modal.hide()
+                    document.body.removeEventListener("CloseProductDeleteModal", eventListener)
+                }
+                document.body.addEventListener("CloseProductDeleteModal", eventListener)
+    })()
+</script>
+}

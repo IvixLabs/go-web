@@ -1,0 +1,50 @@
+package user
+
+import (
+	"ivixlabs.com/proj5/api/web/components"
+	"ivixlabs.com/proj5/internal/validation/form"
+	"ivixlabs.com/proj5/internal/user/auth"
+)
+
+templ Auth(form *auth.Form, formErrors *form.Errors) {
+	if components.App(ctx).IsHxRequest() {
+		@authForm(form, formErrors)
+	} else {
+		@components.Layout() {
+			@authForm(form, formErrors)
+		}
+	}
+}
+
+templ authForm(form *auth.Form, formErrors *form.Errors) {
+	<form hx-post="/auth" hx-swap="outerHTML" _="on submit toggle @disabled on #formFields">
+		<fieldset id="formFields">
+			<div class="mb-3">
+				<label for="inputEmail4" class="form-label">Email</label>
+				<input
+					type="text"
+					value={ form.Email }
+					class={ components.GetClass(formErrors.IsError("Email")) }
+					name="email"
+					id="inputEmail4"
+				/>
+				@templ.Raw(components.GetErrorMessage(formErrors, "Email"))
+			</div>
+			<div class="mb-3">
+				<label for="inputUserPassword" class="form-label">Password</label>
+				<input
+					type="password"
+					value={ form.Password }
+					class={ components.GetClass(formErrors.IsError("Password")) }
+					name="password"
+					id="inputUserPassword"
+				/>
+				@templ.Raw(components.GetErrorMessage(formErrors, "Password"))
+			</div>
+			<button type="submit" class="btn btn-primary">
+				<span class="htmx-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+				Sign in
+			</button>
+		</fieldset>
+	</form>
+}

@@ -1,0 +1,25 @@
+package user
+
+import (
+	"ivixlabs.com/proj5/internal/model"
+	"ivixlabs.com/proj5/api/web/components"
+)
+
+templ List(users []model.User) {
+	@components.Layout() {
+		<table class="table">
+			<thead>
+				<th scope="col">ID</th>
+				<th scope="col">Email</th>
+			</thead>
+			<tbody>
+				for _, user := range users {
+					<tr>
+						<td>{ user.GetId() }</td>
+						<td>{ user.GetEmail() }</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+}
