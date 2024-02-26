@@ -9,7 +9,6 @@ type User interface {
 	GetEmail() string
 	GetAddress() string
 	GetPassword() string
-	Role() string
 }
 
 type UserRepository interface {
@@ -23,11 +22,6 @@ type user struct {
 	Email    string
 	Address  string
 	Password string
-	role     string
-}
-
-func (u *user) Role() string {
-	return u.role
 }
 
 func (u *user) GetId() string {
