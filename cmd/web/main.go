@@ -4,12 +4,10 @@ import (
 	"log"
 	"os"
 
-	"ivixlabs.com/goweb/internal/http"
+	"ivixlabs.com/goweb/internal/app"
 )
 
 func main() {
-	log.Println("Web is started")
-
 	dbUrl := os.Getenv("DATABASE_URL")
 	log.Println("DbUrl", dbUrl)
 	if dbUrl == "" {
@@ -37,9 +35,5 @@ func main() {
 		port = "8080"
 	}
 
-	log.Println("Port", port)
-	log.Println("StaticDir", staticDir)
-	log.Println("SessionsDir", sessionsDir)
-
-	http.StartServer(":"+port, staticDir, dbUrl, sessionsDir)
+	app.Run(":"+port, staticDir, dbUrl, sessionsDir)
 }

@@ -1,6 +1,8 @@
 package http
 
 import (
+	"embed"
+	"io/fs"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -14,25 +16,39 @@ import (
 	"ivixlabs.com/goweb/internal/validation/form"
 )
 
+//go:embed resources
+var resources embed.FS
+
 func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	formValidator *form.Validator, productService productUseCase.Service, staticDir string) http.Handler {
 	router := mux.NewRouter()
 
 	router.Use(middleware.GetContextMiddleware(sessionStore))
 
-	router.Handle("/", handlers.GetHomeHandler())
+	router.Handle("/", middleware.GretPreloadMiddleware(handlers.GetHomeHandler()))
 
-	router.HandleFunc("/signup", user.GetSignupHandlerFunc(userService, formValidator))
-	router.HandleFunc("/users", middleware.GretAuthMiddleware(user.GetListHandlerFunc(userService), sessionStore))
-	router.HandleFunc("/auth", user.GetAuthHandlerFunc(userService, formValidator, sessionStore))
+	router.HandleFunc("/signup", middleware.GretPreloadMiddleware(
+		user.GetSignupHandlerFunc(userService, formValidator)))
+	router.HandleFunc("/users", middleware.GretPreloadMiddleware(
+		middleware.GretAuthMiddleware(user.GetListHandlerFunc(userService), sessionStore)))
+	router.HandleFunc("/auth", middleware.GretPreloadMiddleware(
+		user.GetAuthHandlerFunc(userService, formValidator, sessionStore)))
 	router.HandleFunc("/logout", user.GetLogoutHandlerFunc())
-	router.Handle("/products", middleware.GretAuthMiddleware(product.GetListHandler(productService).ServeHTTP, sessionStore))
-	router.Handle("/products/form", middleware.GretAuthMiddleware(product.GetSaveHandler(formValidator, productService).ServeHTTP, sessionStore))
-	router.Handle("/products/delete", middleware.GretAuthMiddleware(product.GetDeleteHandler(productService).ServeHTTP, sessionStore))
+	router.Handle("/products", middleware.GretPreloadMiddleware(
+		middleware.GretAuthMiddleware(product.GetListHandler(productService).ServeHTTP, sessionStore)))
+	router.Handle("/products/form", middleware.GretPreloadMiddleware(
+		middleware.GretAuthMiddleware(product.GetSaveHandler(formValidator, productService).ServeHTTP, sessionStore)))
+	router.Handle("/products/delete", middleware.GretPreloadMiddleware(
+		middleware.GretAuthMiddleware(product.GetDeleteHandler(productService).ServeHTTP, sessionStore)))
+
+	resourceDir, err := fs.Sub(resources, "resources")
+	if err != nil {
+		panic(err)
+	}
 
 	router.
 		PathPrefix("/static/").
-		Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
+		Handler(http.StripPrefix("/static/", http.FileServer(http.FS(resourceDir))))
 
 	return router
 }

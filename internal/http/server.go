@@ -1,43 +1,44 @@
 package http
 
 import (
-	"log"
+	"context"
 	"net/http"
-
-	"github.com/gorilla/sessions"
-	httpController "ivixlabs.com/goweb/internal/controller/http"
-	"ivixlabs.com/goweb/internal/gorm"
-	"ivixlabs.com/goweb/internal/model"
-	product2 "ivixlabs.com/goweb/internal/product"
-	user2 "ivixlabs.com/goweb/internal/user"
-	"ivixlabs.com/goweb/internal/validation/form"
-	user3 "ivixlabs.com/goweb/internal/validation/user"
+	"time"
 )
 
-func StartServer(addr string, staticDir string, dbUrl string, sessionsDir string) {
-	sessionStore := sessions.NewFilesystemStore(sessionsDir, []byte("abc123"))
+type Server interface {
+	Start()
+	Stop() error
+	Notify() <-chan error
+}
 
-	gormDb := gorm.NewGormDb(dbUrl)
+type server struct {
+	httpServer http.Server
+	notify     chan error
+}
 
-	model.GormInitModels(gormDb)
-
-	userRepository := model.NewGormUserRepository(gormDb)
-	userService := user2.NewService(userRepository)
-
-	productRepository := model.NewGormProductRepository(gormDb)
-	productService := product2.NewService(productRepository)
-
-	formValidator := form.NewValidator()
-	user3.InitEmailValidation(formValidator, userService)
-
-	router := httpController.NewRouter(sessionStore,
-		userService, formValidator, productService, staticDir)
-
-	server := http.Server{Addr: addr, Handler: router}
-
-	err := server.ListenAndServe()
-
-	if err != nil {
-		log.Println(err)
+func NewServer(addr string, router http.Handler) Server {
+	return &server{
+		httpServer: http.Server{Addr: addr, Handler: router},
+		notify:     make(chan error),
 	}
+}
+
+func (server *server) Start() {
+	go func() {
+		server.notify <- server.httpServer.ListenAndServe()
+		close(server.notify)
+	}()
+}
+
+func (server *server) Stop() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	return server.httpServer.Shutdown(ctx)
+}
+
+func (server *server) Notify() <-chan error {
+	return server.notify
+
 }
