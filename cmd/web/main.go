@@ -4,9 +4,7 @@ import (
 	"log"
 	"os"
 
-	db2 "ivixlabs.com/goweb/internal/db"
 	"ivixlabs.com/goweb/internal/http"
-	"ivixlabs.com/goweb/internal/model"
 )
 
 func main() {
@@ -17,10 +15,6 @@ func main() {
 	if dbUrl == "" {
 		panic("No db url")
 	}
-
-	db := db2.GetDb(dbUrl)
-
-	model.GormInitModels(db)
 
 	staticDir := os.Getenv("STATIC_DIR")
 	if staticDir == "" {
@@ -47,5 +41,5 @@ func main() {
 	log.Println("StaticDir", staticDir)
 	log.Println("SessionsDir", sessionsDir)
 
-	http.StartServer(":"+port, staticDir, db, sessionsDir)
+	http.StartServer(":"+port, staticDir, dbUrl, sessionsDir)
 }
