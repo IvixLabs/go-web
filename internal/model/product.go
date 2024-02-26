@@ -1,10 +1,7 @@
 package model
 
 import (
-	"errors"
-
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Product interface {
@@ -13,6 +10,15 @@ type Product interface {
 	GetPrice() int
 	GetBrand() string
 	GetUserId() string
+}
+
+type ProductRepository interface {
+	Create(p Product)
+	FindAllProducts() []Product
+	FindProductById(productId string) Product
+	UpdateProduct(p Product, updateProduct *UpdateProductArg)
+	DeleteProduct(id string, userId string) int64
+	FindProductsByUserId(userId string) []Product
 }
 
 type UpdateProductArg struct {
@@ -64,80 +70,4 @@ func NewProduct(userId string, title string, price int, brand string) Product {
 		Brand:  brand,
 		Info:   title + " " + brand,
 	}
-}
-
-func Create(p Product, db *gorm.DB) {
-	pStruct := (p).(*product)
-	db.Create(pStruct)
-}
-
-func FindAllProducts(db *gorm.DB) []Product {
-
-	var productArr []product
-
-	db.Find(&productArr)
-
-	result := make([]Product, len(productArr))
-	for i, productItem := range productArr {
-		result[i] = &productItem
-	}
-
-	return result
-}
-
-func FindProductById(db *gorm.DB, productId string) Product {
-
-	var productObj product
-
-	tx := db.First(&productObj, "id=?", productId)
-
-	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-		return nil
-	}
-
-	return &productObj
-}
-
-func AutoMigrateProduct(db *gorm.DB) {
-	err := db.AutoMigrate(&product{})
-	if err != nil {
-		panic(err)
-	}
-}
-
-func UpdateProduct(p Product, updateProduct *UpdateProductArg, db *gorm.DB) {
-	pStruct := (p).(*product)
-
-	if updateProduct.IsTitle {
-		pStruct.Title = updateProduct.Title
-	}
-
-	if updateProduct.IsBrand {
-		pStruct.Brand = updateProduct.Brand
-	}
-
-	if updateProduct.IsPrice {
-		pStruct.Price = updateProduct.Price
-	}
-
-	db.Save(p)
-}
-
-func DeleteProduct(id string, userId string, db *gorm.DB) int64 {
-	tx := db.Delete(&product{}, "id=? and user_id=?", id, userId)
-	return tx.RowsAffected
-}
-
-func FindProductsByUserId(db *gorm.DB, userId string) []Product {
-
-	var productArr []product
-
-	db.Find(&productArr, "user_id=?", userId)
-
-	result := make([]Product, len(productArr))
-	for i, productItem := range productArr {
-		result[i] = &productItem
-	}
-
-	return result
 }

@@ -20,7 +20,7 @@ func main() {
 
 	db := db2.GetDb(dbUrl)
 
-	model.InitModels(db)
+	model.GormInitModels(db)
 
 	staticDir := os.Getenv("STATIC_DIR")
 	if staticDir == "" {

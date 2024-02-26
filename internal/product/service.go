@@ -3,7 +3,6 @@ package product
 import (
 	"strconv"
 
-	"gorm.io/gorm"
 	"ivixlabs.com/goweb/internal/model"
 )
 
@@ -17,11 +16,11 @@ type Service interface {
 }
 
 type service struct {
-	db *gorm.DB
+	productRepository model.ProductRepository
 }
 
-func NewService(db *gorm.DB) Service {
-	return &service{db: db}
+func NewService(productRepository model.ProductRepository) Service {
+	return &service{productRepository: productRepository}
 }
 
 func (service *service) CreateNewProduct(form *Form, userId string) model.Product {
@@ -32,7 +31,7 @@ func (service *service) CreateNewProduct(form *Form, userId string) model.Produc
 	}
 
 	productObj := model.NewProduct(userId, form.Title, price, form.Brand)
-	model.Create(productObj, service.db)
+	service.productRepository.Create(productObj)
 
 	return productObj
 }
@@ -52,21 +51,21 @@ func (service *service) UpdateProduct(form *Form, p model.Product) {
 		IsPrice: true,
 	}
 
-	model.UpdateProduct(p, &updateP, service.db)
+	service.productRepository.UpdateProduct(p, &updateP)
 }
 
 func (service *service) FindAll() []model.Product {
-	return model.FindAllProducts(service.db)
+	return service.productRepository.FindAllProducts()
 }
 
 func (service *service) FindByUserId(userId string) []model.Product {
-	return model.FindProductsByUserId(service.db, userId)
+	return service.productRepository.FindProductsByUserId(userId)
 }
 
 func (service *service) FindById(productId string) model.Product {
-	return model.FindProductById(service.db, productId)
+	return service.productRepository.FindProductById(productId)
 }
 
 func (service *service) DeleteProduct(id string, userId string) int64 {
-	return model.DeleteProduct(id, userId, service.db)
+	return service.productRepository.DeleteProduct(id, userId)
 }

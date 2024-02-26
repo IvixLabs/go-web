@@ -1,9 +1,7 @@
 package model
 
 import (
-	"errors"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type User interface {
@@ -11,6 +9,13 @@ type User interface {
 	GetEmail() string
 	GetAddress() string
 	GetPassword() string
+	Role() string
+}
+
+type UserRepository interface {
+	SaveUser(u User)
+	FindAllUsers() []User
+	FindUserByEmail(email string) User
 }
 
 type user struct {
@@ -18,6 +23,11 @@ type user struct {
 	Email    string
 	Address  string
 	Password string
+	role     string
+}
+
+func (u *user) Role() string {
+	return u.role
 }
 
 func (u *user) GetId() string {
@@ -41,44 +51,5 @@ func NewUser(email string, password string, address string) User {
 		Email:    email,
 		Password: password,
 		Address:  address,
-	}
-}
-
-func SaveUser(u User, db *gorm.DB) {
-	pStruct := (u).(*user)
-	db.Create(pStruct)
-}
-
-func FindAllUsers(db *gorm.DB) []User {
-
-	var userArr []user
-
-	db.Find(&userArr)
-
-	result := make([]User, len(userArr))
-	for i, userItem := range userArr {
-		result[i] = &userItem
-	}
-
-	return result
-}
-
-func FindUserByEmail(db *gorm.DB, email string) User {
-
-	var userObj user
-
-	tx := db.Where("email=?", email).First(&userObj)
-
-	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-		return nil
-	}
-
-	return &userObj
-}
-
-func AutoMigrateUser(db *gorm.DB) {
-	err := db.AutoMigrate(&user{})
-	if err != nil {
-		panic(err)
 	}
 }

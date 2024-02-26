@@ -11,6 +11,7 @@ import (
 	"ivixlabs.com/goweb/api/handlers/product"
 	"ivixlabs.com/goweb/api/handlers/user"
 	"ivixlabs.com/goweb/api/middleware"
+	"ivixlabs.com/goweb/internal/model"
 	product2 "ivixlabs.com/goweb/internal/product"
 	user2 "ivixlabs.com/goweb/internal/user"
 	"ivixlabs.com/goweb/internal/validation/form"
@@ -20,8 +21,11 @@ import (
 func StartServer(addr string, staticDir string, db *gorm.DB, sessionsDir string) {
 	var sessionStore = sessions.NewFilesystemStore(sessionsDir, []byte("abc123"))
 
-	userService := user2.NewService(db)
-	productService := product2.NewService(db)
+	userRepository := model.NewGormUserRepository(db)
+	userService := user2.NewService(userRepository)
+
+	productRepository := model.NewGormProductRepository(db)
+	productService := product2.NewService(productRepository)
 
 	formValidator := form.NewValidator()
 	user3.InitEmailValidation(formValidator, userService)

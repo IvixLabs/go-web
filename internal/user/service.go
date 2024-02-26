@@ -1,7 +1,6 @@
 package user
 
 import (
-	"gorm.io/gorm"
 	"ivixlabs.com/goweb/internal/model"
 	"ivixlabs.com/goweb/internal/user/registration"
 )
@@ -13,24 +12,23 @@ type Service interface {
 }
 
 type service struct {
-	db *gorm.DB
+	userRepository model.UserRepository
 }
 
-func NewService(db *gorm.DB) Service {
-	return &service{db: db}
+func NewService(userRepository model.UserRepository) Service {
+	return &service{userRepository: userRepository}
 }
 
 func (service *service) FindAll() []model.User {
-	return model.FindAllUsers(service.db)
+	return service.userRepository.FindAllUsers()
 }
 
 func (service *service) FindByEmail(email string) model.User {
-	return model.FindUserByEmail(service.db, email)
+	return service.userRepository.FindUserByEmail(email)
 }
 
 func (service *service) CreateNewUser(form *registration.Form) (model.User, error) {
 	userObj := model.NewUser(form.Email, form.Password, form.Address)
-	model.SaveUser(userObj, service.db)
-
+	service.userRepository.SaveUser(userObj)
 	return userObj, nil
 }
