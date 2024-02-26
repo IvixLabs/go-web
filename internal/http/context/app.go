@@ -2,8 +2,9 @@ package context
 
 import (
 	context2 "context"
-	"github.com/gorilla/sessions"
 	"net/http"
+
+	"github.com/gorilla/sessions"
 )
 
 type App struct {
@@ -96,6 +97,10 @@ func (context *App) Logout() {
 
 func (context *App) IsHxRequest() bool {
 	return context.Request.Header.Get("HX-Request") == "true"
+}
+
+func (context *App) Url() string {
+	return context.Request.URL.Path
 }
 
 func GetApp(ctx context2.Context) *App {

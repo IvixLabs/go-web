@@ -34,6 +34,14 @@ func Layout() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = updateActivePage(App(ctx).Url()).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
 				if !templ_7745c5c3_IsBuffer {
 					_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
 				}
@@ -69,6 +77,17 @@ func Layout() templ.Component {
 		}
 		return templ_7745c5c3_Err
 	})
+}
+
+func updateActivePage(pageUrl string) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_updateActivePage_c71c`,
+		Function: `function __templ_updateActivePage_c71c(pageUrl){document.querySelectorAll('#pageLinks .nav-item .nav-link').forEach(e => e.classList.remove('active'))
+    document.querySelector('#pageLinks .nav-item .nav-link[href="'+pageUrl+'"]').classList.add('active')
+}`,
+		Call:       templ.SafeScript(`__templ_updateActivePage_c71c`, pageUrl),
+		CallInline: templ.SafeScriptInline(`__templ_updateActivePage_c71c`, pageUrl),
+	}
 }
 
 func emptyLayout() templ.Component {
@@ -148,17 +167,68 @@ func navbar() templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"navbar navbar-expand-md fixed-top navbar-dark bg-dark\"><div class=\"container-fluid\"><a class=\"navbar-brand\" href=\"/\" hx-get=\"/\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Dashboard</a> <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarCollapse\" aria-controls=\"navbarCollapse\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button><div class=\"collapse navbar-collapse\" id=\"navbarCollapse\"><ul class=\"navbar-nav me-auto mb-2 mb-md-0\" id=\"pageLinks\"><li class=\"nav-item\"><a class=\"nav-link\" id=\"page-logout\" href=\"/users\" hx-get=\"/users\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Users</a></li><li class=\"nav-item\"><a class=\"nav-link\" id=\"page-logout\" href=\"/products\" hx-get=\"/products\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Products</a></li>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"navbar navbar-expand-md fixed-top navbar-dark bg-dark\"><div class=\"container-fluid\"><a class=\"navbar-brand\" href=\"/\" hx-get=\"/\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Dashboard</a> <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarCollapse\" aria-controls=\"navbarCollapse\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button><div class=\"collapse navbar-collapse\" id=\"navbarCollapse\"><ul class=\"navbar-nav me-auto mb-2 mb-md-0\" id=\"pageLinks\"><li class=\"nav-item\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var7 = []any{"nav-link", templ.KV("active", App(ctx).Url() == "/users")}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var7...)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ.CSSClasses(templ_7745c5c3_Var7).String()))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/users\" hx-get=\"/users\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Users</a></li><li class=\"nav-item\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var8 = []any{"nav-link", templ.KV("active", App(ctx).Url() == "/products")}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var8...)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ.CSSClasses(templ_7745c5c3_Var8).String()))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/products\" hx-get=\"/products\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Products</a></li>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if App(ctx).IsAuth() {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"nav-item\"><a class=\"nav-link\" id=\"page-logout\" href=\"/logout\">Logout</a></li>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"nav-item\"><a class=\"nav-link\" href=\"/logout\">Logout</a></li>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"nav-item\"><a class=\"nav-link\" id=\"page-logout\" href=\"/signup\" hx-get=\"/signup\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Signup</a></li>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"nav-item\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 = []any{"nav-link", templ.KV("active", App(ctx).Url() == "/signup")}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var9...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ.CSSClasses(templ_7745c5c3_Var9).String()))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/signup\" hx-get=\"/signup\" hx-target=\"#pageHolder\" hx-replace-url=\"true\">Signup</a></li>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

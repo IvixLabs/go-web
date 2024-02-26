@@ -4,12 +4,18 @@ templ Layout() {
 	if App(ctx).IsHxRequest() {
 		@emptyLayout() {
 			{ children... }
+			@updateActivePage(App(ctx).Url())
 		}
 	} else {
 		@fullLayout() {
 			{ children... }
 		}
 	}
+}
+
+script updateActivePage(pageUrl string) {
+	document.querySelectorAll('#pageLinks .nav-item .nav-link').forEach(e => e.classList.remove('active'))
+    document.querySelector('#pageLinks .nav-item .nav-link[href="'+pageUrl+'"]').classList.add('active')
 }
 
 templ emptyLayout() {
@@ -226,18 +232,18 @@ templ navbar() {
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav me-auto mb-2 mb-md-0" id="pageLinks">
 					<li class="nav-item">
-						<a class="nav-link" id="page-logout" href="/users" hx-get="/users" hx-target="#pageHolder" hx-replace-url="true">Users</a>
+						<a class={ "nav-link", templ.KV("active", App(ctx).Url()=="/users") } href="/users" hx-get="/users" hx-target="#pageHolder" hx-replace-url="true">Users</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="page-logout" href="/products" hx-get="/products" hx-target="#pageHolder" hx-replace-url="true">Products</a>
+						<a class={ "nav-link", templ.KV("active", App(ctx).Url()=="/products") } href="/products" hx-get="/products" hx-target="#pageHolder" hx-replace-url="true">Products</a>
 					</li>
 					if App(ctx).IsAuth() {
 						<li class="nav-item">
-							<a class="nav-link" id="page-logout" href="/logout">Logout</a>
+							<a class="nav-link" href="/logout">Logout</a>
 						</li>
 					} else {
 						<li class="nav-item">
-							<a class="nav-link" id="page-logout" href="/signup" hx-get="/signup" hx-target="#pageHolder" hx-replace-url="true">Signup</a>
+							<a class={ "nav-link", templ.KV("active", App(ctx).Url()=="/signup") } href="/signup" hx-get="/signup" hx-target="#pageHolder" hx-replace-url="true">Signup</a>
 						</li>
 					}
 				</ul>
