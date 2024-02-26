@@ -1,6 +1,22 @@
 package components
 
 templ Layout() {
+	if App(ctx).IsHxRequest() {
+		@emptyLayout() {
+			{ children... }
+		}
+	} else {
+		@fullLayout() {
+			{ children... }
+		}
+	}
+}
+
+templ emptyLayout() {
+	{ children... }
+}
+
+templ fullLayout() {
 	<!DOCTYPE html>
 	<html lang="en" data-bs-theme="auto">
 		<head>
@@ -184,7 +200,7 @@ templ Layout() {
 				</ul>
 			</div>
 			@navbar()
-			<main class="container" id="main">
+			<main class="container" id="pageHolder">
 				{ children... }
 			</main>
 			<script src="/static/main.js"></script>
@@ -195,7 +211,7 @@ templ Layout() {
 templ navbar() {
 	<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/">Dashboard</a>
+			<a class="navbar-brand" href="/" hx-get="/" hx-target="#pageHolder" hx-replace-url="true">Dashboard</a>
 			<button
 				class="navbar-toggler"
 				type="button"
@@ -210,10 +226,10 @@ templ navbar() {
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav me-auto mb-2 mb-md-0" id="pageLinks">
 					<li class="nav-item">
-						<a class="nav-link" id="page-logout" href="/users">Users</a>
+						<a class="nav-link" id="page-logout" href="/users" hx-get="/users" hx-target="#pageHolder" hx-replace-url="true">Users</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="page-logout" href="/products">Products</a>
+						<a class="nav-link" id="page-logout" href="/products" hx-get="/products" hx-target="#pageHolder" hx-replace-url="true">Products</a>
 					</li>
 					if App(ctx).IsAuth() {
 						<li class="nav-item">
@@ -221,7 +237,7 @@ templ navbar() {
 						</li>
 					} else {
 						<li class="nav-item">
-							<a class="nav-link" id="page-logout" href="/signup">Signup</a>
+							<a class="nav-link" id="page-logout" href="/signup" hx-get="/signup" hx-target="#pageHolder" hx-replace-url="true">Signup</a>
 						</li>
 					}
 				</ul>
