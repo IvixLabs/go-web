@@ -1,8 +1,9 @@
 package user
 
 import (
-	"ivixlabs.com/proj5/internal/http/context"
 	"net/http"
+
+	"ivixlabs.com/goweb/internal/http/context"
 )
 
 func GetLogoutHandlerFunc() func(w http.ResponseWriter, r *http.Request) {

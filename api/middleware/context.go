@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	context3 "ivixlabs.com/proj5/internal/http/context"
-	"net/http"
+	context3 "ivixlabs.com/goweb/internal/http/context"
 )
 
 func GetContextMiddleware(sessionStore sessions.Store) mux.MiddlewareFunc {

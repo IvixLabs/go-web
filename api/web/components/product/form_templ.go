@@ -11,9 +11,9 @@ import "io"
 import "bytes"
 
 import (
-	"ivixlabs.com/proj5/api/web/components"
-	"ivixlabs.com/proj5/internal/product"
-	"ivixlabs.com/proj5/internal/validation/form"
+	"ivixlabs.com/goweb/api/web/components"
+	"ivixlabs.com/goweb/internal/product"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func ModalFormView(productForm *product.Form, formErrors *form.Errors, productId string) templ.Component {

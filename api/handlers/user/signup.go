@@ -1,11 +1,12 @@
 package user
 
 import (
-	user2 "ivixlabs.com/proj5/api/web/components/user"
-	"ivixlabs.com/proj5/internal/user"
-	"ivixlabs.com/proj5/internal/user/registration"
-	"ivixlabs.com/proj5/internal/validation/form"
 	"net/http"
+
+	user2 "ivixlabs.com/goweb/api/web/components/user"
+	"ivixlabs.com/goweb/internal/user"
+	"ivixlabs.com/goweb/internal/user/registration"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func GetSignupHandlerFunc(userService user.Service, formValidator *form.Validator) func(w http.ResponseWriter, r *http.Request) {

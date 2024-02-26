@@ -11,9 +11,9 @@ import "io"
 import "bytes"
 
 import (
-	"ivixlabs.com/proj5/api/web/components"
-	"ivixlabs.com/proj5/internal/user/auth"
-	"ivixlabs.com/proj5/internal/validation/form"
+	"ivixlabs.com/goweb/api/web/components"
+	"ivixlabs.com/goweb/internal/user/auth"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func Auth(form *auth.Form, formErrors *form.Errors) templ.Component {

@@ -3,9 +3,9 @@ package user
 import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
-	user2 "ivixlabs.com/proj5/internal/user"
-	"ivixlabs.com/proj5/internal/user/auth"
-	"ivixlabs.com/proj5/internal/validation/form"
+	user2 "ivixlabs.com/goweb/internal/user"
+	"ivixlabs.com/goweb/internal/user/auth"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func InitEmailValidation(formValidator *form.Validator, userService user2.Service) {

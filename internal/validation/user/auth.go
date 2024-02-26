@@ -2,8 +2,8 @@ package user
 
 import (
 	"github.com/go-playground/validator/v10"
-	"ivixlabs.com/proj5/internal/user"
-	"ivixlabs.com/proj5/internal/user/auth"
+	"ivixlabs.com/goweb/internal/user"
+	"ivixlabs.com/goweb/internal/user/auth"
 )
 
 func GetAuthLevelValidator(userService user.Service) validator.StructLevelFunc {

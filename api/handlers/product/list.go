@@ -1,10 +1,11 @@
 package product
 
 import (
-	"ivixlabs.com/proj5/api/web/components/product"
-	"ivixlabs.com/proj5/internal/http/context"
-	product3 "ivixlabs.com/proj5/internal/product"
 	"net/http"
+
+	"ivixlabs.com/goweb/api/web/components/product"
+	"ivixlabs.com/goweb/internal/http/context"
+	product3 "ivixlabs.com/goweb/internal/product"
 )
 
 func GetListHandler(productService product3.Service) http.HandlerFunc {

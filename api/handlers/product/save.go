@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"ivixlabs.com/proj5/api/web/components/product"
-	"ivixlabs.com/proj5/internal/http/context"
-	"ivixlabs.com/proj5/internal/model"
-	product2 "ivixlabs.com/proj5/internal/product"
-	"ivixlabs.com/proj5/internal/validation/form"
+	"ivixlabs.com/goweb/api/web/components/product"
+	"ivixlabs.com/goweb/internal/http/context"
+	"ivixlabs.com/goweb/internal/model"
+	product2 "ivixlabs.com/goweb/internal/product"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func GetSaveHandler(formValidator *form.Validator, productService product2.Service) http.HandlerFunc {

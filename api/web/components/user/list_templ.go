@@ -11,8 +11,8 @@ import "io"
 import "bytes"
 
 import (
-	"ivixlabs.com/proj5/api/web/components"
-	"ivixlabs.com/proj5/internal/model"
+	"ivixlabs.com/goweb/api/web/components"
+	"ivixlabs.com/goweb/internal/model"
 )
 
 func List(users []model.User) templ.Component {

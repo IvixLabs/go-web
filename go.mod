@@ -1,4 +1,4 @@
-module ivixlabs.com/proj5
+module ivixlabs.com/goweb
 
 go 1.22.0
 

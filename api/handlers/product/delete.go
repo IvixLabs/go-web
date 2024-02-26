@@ -3,9 +3,9 @@ package product
 import (
 	"net/http"
 
-	"ivixlabs.com/proj5/api/web/components/product"
-	"ivixlabs.com/proj5/internal/http/context"
-	product2 "ivixlabs.com/proj5/internal/product"
+	"ivixlabs.com/goweb/api/web/components/product"
+	"ivixlabs.com/goweb/internal/http/context"
+	product2 "ivixlabs.com/goweb/internal/product"
 )
 
 func GetDeleteHandler(productService product2.Service) http.HandlerFunc {

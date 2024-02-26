@@ -11,9 +11,9 @@ import "io"
 import "bytes"
 
 import (
-	"ivixlabs.com/proj5/api/web/components"
-	"ivixlabs.com/proj5/internal/user/registration"
-	"ivixlabs.com/proj5/internal/validation/form"
+	"ivixlabs.com/goweb/api/web/components"
+	"ivixlabs.com/goweb/internal/user/registration"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func Signup(form *registration.Form, formErrors *form.Errors) templ.Component {

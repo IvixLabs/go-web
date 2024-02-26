@@ -2,8 +2,8 @@ package user
 
 import (
 	"gorm.io/gorm"
-	"ivixlabs.com/proj5/internal/model"
-	"ivixlabs.com/proj5/internal/user/registration"
+	"ivixlabs.com/goweb/internal/model"
+	"ivixlabs.com/goweb/internal/user/registration"
 )
 
 type Service interface {

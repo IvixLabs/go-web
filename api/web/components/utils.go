@@ -2,9 +2,10 @@ package components
 
 import (
 	"context"
-	appContext "ivixlabs.com/proj5/internal/http/context"
-	"ivixlabs.com/proj5/internal/validation/form"
 	"strings"
+
+	appContext "ivixlabs.com/goweb/internal/http/context"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func App(ctx context.Context) *appContext.App {

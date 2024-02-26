@@ -7,14 +7,14 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"gorm.io/gorm"
-	"ivixlabs.com/proj5/api/handlers"
-	"ivixlabs.com/proj5/api/handlers/product"
-	"ivixlabs.com/proj5/api/handlers/user"
-	"ivixlabs.com/proj5/api/middleware"
-	product2 "ivixlabs.com/proj5/internal/product"
-	user2 "ivixlabs.com/proj5/internal/user"
-	"ivixlabs.com/proj5/internal/validation/form"
-	user3 "ivixlabs.com/proj5/internal/validation/user"
+	"ivixlabs.com/goweb/api/handlers"
+	"ivixlabs.com/goweb/api/handlers/product"
+	"ivixlabs.com/goweb/api/handlers/user"
+	"ivixlabs.com/goweb/api/middleware"
+	product2 "ivixlabs.com/goweb/internal/product"
+	user2 "ivixlabs.com/goweb/internal/user"
+	"ivixlabs.com/goweb/internal/validation/form"
+	user3 "ivixlabs.com/goweb/internal/validation/user"
 )
 
 func StartServer(addr string, staticDir string, db *gorm.DB, sessionsDir string) {

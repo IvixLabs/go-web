@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"github.com/gorilla/sessions"
-	"ivixlabs.com/proj5/internal/http/context"
 	"net/http"
+
+	"github.com/gorilla/sessions"
+	"ivixlabs.com/goweb/internal/http/context"
 )
 
 func GretAuthMiddleware(next http.HandlerFunc, cookieStore sessions.Store) http.HandlerFunc {

@@ -1,13 +1,14 @@
 package user
 
 import (
-	"github.com/gorilla/sessions"
-	userComponents "ivixlabs.com/proj5/api/web/components/user"
-	"ivixlabs.com/proj5/internal/http/context"
-	"ivixlabs.com/proj5/internal/user"
-	"ivixlabs.com/proj5/internal/user/auth"
-	"ivixlabs.com/proj5/internal/validation/form"
 	"net/http"
+
+	"github.com/gorilla/sessions"
+	userComponents "ivixlabs.com/goweb/api/web/components/user"
+	"ivixlabs.com/goweb/internal/http/context"
+	"ivixlabs.com/goweb/internal/user"
+	"ivixlabs.com/goweb/internal/user/auth"
+	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func GetAuthHandlerFunc(userService user.Service, formValidator *form.Validator, cookieStore sessions.Store) func(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +33,7 @@ func GetAuthHandlerFunc(userService user.Service, formValidator *form.Validator,
 			if formErrors, ok = formValidator.ValidateForm(&authForm); ok {
 
 				userObj := userService.FindByEmail(authForm.Email)
-				
+
 				appContext := context.GetApp(r.Context())
 				appContext.Login(userObj.GetId())
 

@@ -1,8 +1,9 @@
 package handlers
 
 import (
-	"ivixlabs.com/proj5/api/web/components"
 	"net/http"
+
+	"ivixlabs.com/goweb/api/web/components"
 )
 
 func GetHomeHandler() http.HandlerFunc {

@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"gorm.io/gorm"
-	"ivixlabs.com/proj5/internal/model"
+	"ivixlabs.com/goweb/internal/model"
 )
 
 type Service interface {

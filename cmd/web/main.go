@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	db2 "ivixlabs.com/proj5/internal/db"
-	"ivixlabs.com/proj5/internal/http"
-	"ivixlabs.com/proj5/internal/model"
+	db2 "ivixlabs.com/goweb/internal/db"
+	"ivixlabs.com/goweb/internal/http"
+	"ivixlabs.com/goweb/internal/model"
 )
 
 func main() {

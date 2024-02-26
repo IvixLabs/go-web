@@ -1,9 +1,10 @@
 package user
 
 import (
-	user2 "ivixlabs.com/proj5/api/web/components/user"
-	"ivixlabs.com/proj5/internal/user"
 	"net/http"
+
+	user2 "ivixlabs.com/goweb/api/web/components/user"
+	"ivixlabs.com/goweb/internal/user"
 )
 
 func GetListHandlerFunc(userService user.Service) func(w http.ResponseWriter, r *http.Request) {
