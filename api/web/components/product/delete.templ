@@ -5,7 +5,9 @@ templ DisabledButton() {
 		disabled
 		class="btn btn-danger"
 	>
-		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+		<span class="app-indicator">
+			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+		</span>
 		Yes
 	</button>
 }
@@ -35,7 +37,9 @@ templ ModalDeleteView(productId string) {
 						class="btn btn-danger"
 						hx-delete={ "/products/delete?productId=" + productId }
 					>
-						<span class="htmx-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+						<span class="app-indicator">
+							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+						</span>
 						Yes
 					</button>
 				</div>

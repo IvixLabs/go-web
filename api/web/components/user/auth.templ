@@ -42,7 +42,9 @@ templ authForm(form *auth.Form, formErrors *form.Errors) {
 				@templ.Raw(components.GetErrorMessage(formErrors, "Password"))
 			</div>
 			<button type="submit" class="btn btn-primary">
-				<span class="htmx-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+				<span class="app-indicator">
+					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+				</span>
 				Sign in
 			</button>
 		</fieldset>

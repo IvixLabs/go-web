@@ -53,7 +53,9 @@ templ signupForm(form *registration.Form, formErrors *form.Errors) {
 				@templ.Raw(components.GetErrorMessage(formErrors, "Address"))
 			</div>
 			<button type="submit" class="btn btn-primary">
-				<span class="htmx-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+				<span class="app-indicator">
+					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+				</span>
 				Sign up
 			</button>
 		</fieldset>

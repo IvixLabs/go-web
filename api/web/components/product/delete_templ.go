@@ -23,7 +23,7 @@ func DisabledButton() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button disabled class=\"btn btn-danger\"><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> Yes</button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button disabled class=\"btn btn-danger\"><span class=\"app-indicator\"><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span></span> Yes</button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,7 +55,7 @@ func ModalDeleteView(productId string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"htmx-indicator spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> Yes</button></div></div></div></div><script>\n    (function(){\n        const modal = new bootstrap.Modal('#productDeleteModal')\n        modal.show()\n        const eventListener = function() {\n                    modal.hide()\n                    document.body.removeEventListener(\"CloseProductDeleteModal\", eventListener)\n                }\n                document.body.addEventListener(\"CloseProductDeleteModal\", eventListener)\n    })()\n</script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"app-indicator\"><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span></span> Yes</button></div></div></div></div><script>\n    (function(){\n        const modal = new bootstrap.Modal('#productDeleteModal')\n        modal.show()\n        const eventListener = function() {\n                    modal.hide()\n                    document.body.removeEventListener(\"CloseProductDeleteModal\", eventListener)\n                }\n                document.body.addEventListener(\"CloseProductDeleteModal\", eventListener)\n    })()\n</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

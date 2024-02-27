@@ -174,7 +174,7 @@ func signupForm(form *registration.Form, formErrors *form.Errors) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button type=\"submit\" class=\"btn btn-primary\"><span class=\"htmx-indicator spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> Sign up</button></fieldset></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button type=\"submit\" class=\"btn btn-primary\"><span class=\"app-indicator\"><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span></span> Sign up</button></fieldset></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -34,16 +34,15 @@ templ fullLayout() {
 			<title>Fixed top navbar example · Bootstrap v5.3</title>
 			<link rel="canonical" href="/"/>
 			<style>
-            .spinner-border {
+			.app-indicator {
                 display: none;
+            }			
+            .htmx-request .app-indicator {
+                display: initial;
             }
 
-            .htmx-request .spinner-border {
-                display: inline-block;
-            }
-
-            .htmx-request.spinner-border {
-                display: inline-block;
+            .htmx-request.app-indicator {
+                display: initial;
             }
 
             .bd-placeholder-img {
@@ -217,25 +216,28 @@ templ fullLayout() {
 templ navbar() {
 	<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/" hx-get="/" hx-target="#pageHolder" hx-replace-url="true">Dashboard</a>
-			<button
-				class="navbar-toggler"
-				type="button"
-				data-bs-toggle="collapse"
-				data-bs-target="#navbarCollapse"
-				aria-controls="navbarCollapse"
-				aria-expanded="false"
-				aria-label="Toggle navigation"
-			>
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			<a class="navbar-brand" href="/" hx-get="/" hx-target="#pageHolder" hx-indicator="#pageLoading" hx-replace-url="true">Dashboard</a>
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav me-auto mb-2 mb-md-0" id="pageLinks">
 					<li class="nav-item">
-						<a class={ "nav-link", templ.KV("active", App(ctx).Url()=="/users") } href="/users" hx-get="/users" hx-target="#pageHolder" hx-replace-url="true">Users</a>
+						<a
+							class={ "nav-link", templ.KV("active", App(ctx).Url()=="/users") }
+							hx-indicator="#pageLoading"
+							href="/users"
+							hx-get="/users"
+							hx-target="#pageHolder"
+							hx-replace-url="true"
+						>Users</a>
 					</li>
 					<li class="nav-item">
-						<a class={ "nav-link", templ.KV("active", App(ctx).Url()=="/products") } href="/products" hx-get="/products" hx-target="#pageHolder" hx-replace-url="true">Products</a>
+						<a
+							class={ "nav-link", templ.KV("active", App(ctx).Url()=="/products") }
+							hx-indicator="#pageLoading"
+							href="/products"
+							hx-get="/products"
+							hx-target="#pageHolder"
+							hx-replace-url="true"
+						>Products</a>
 					</li>
 					if App(ctx).IsAuth() {
 						<li class="nav-item">
@@ -243,10 +245,35 @@ templ navbar() {
 						</li>
 					} else {
 						<li class="nav-item">
-							<a class={ "nav-link", templ.KV("active", App(ctx).Url()=="/signup") } href="/signup" hx-get="/signup" hx-target="#pageHolder" hx-replace-url="true">Signup</a>
+							<a
+								class={ "nav-link", templ.KV("active", App(ctx).Url()=="/signup") }
+								hx-indicator="#pageLoading"
+								href="/signup"
+								hx-get="/signup"
+								hx-target="#pageHolder"
+								hx-replace-url="true"
+							>Signup</a>
 						</li>
 					}
 				</ul>
+			</div>
+			<div class="d-flex justify-content-end">
+				<div class="app-indicator" id="pageLoading">
+					<div class="spinner-border text-light" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#navbarCollapse"
+					aria-controls="navbarCollapse"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
 			</div>
 		</div>
 	</nav>

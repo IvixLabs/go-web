@@ -198,7 +198,7 @@ func ProductFormView(productForm *product.Form, formErrors *form.Errors, product
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"btn btn-primary\"><span class=\"htmx-indicator spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> Save</button></div></fieldset></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"btn btn-primary\"><span class=\"app-indicator\"><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span></span> Save</button></div></fieldset></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
