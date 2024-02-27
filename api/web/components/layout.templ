@@ -213,47 +213,43 @@ templ fullLayout() {
 	</html>
 }
 
+templ navbarPageItem(url string, title string) {
+	<li class="nav-item">
+		<a
+			data-bs-toggle="collapse"
+			data-bs-target="#navbarCollapse"
+			class={ "nav-link", "d-sm-block", "d-md-none", templ.KV("active", App(ctx).Url()==url) }
+			hx-indicator="#pageLoading"
+			href={templ.SafeURL(url)}
+			hx-get={url}
+			hx-target="#pageHolder"
+			hx-replace-url="true"
+		>{title}</a>
+		<a
+			class={ "nav-link", "d-none", "d-sm-none", "d-md-block", templ.KV("active", App(ctx).Url()==url) }
+			hx-indicator="#pageLoading"
+			href={templ.SafeURL(url)}
+			hx-get={url}
+			hx-target="#pageHolder"
+			hx-replace-url="true"
+		>{title}</a>
+	</li>
+}
+
 templ navbar() {
 	<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="/" hx-get="/" hx-target="#pageHolder" hx-indicator="#pageLoading" hx-replace-url="true">Dashboard</a>
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav me-auto mb-2 mb-md-0" id="pageLinks">
-					<li class="nav-item">
-						<a
-							class={ "nav-link", templ.KV("active", App(ctx).Url()=="/users") }
-							hx-indicator="#pageLoading"
-							href="/users"
-							hx-get="/users"
-							hx-target="#pageHolder"
-							hx-replace-url="true"
-						>Users</a>
-					</li>
-					<li class="nav-item">
-						<a
-							class={ "nav-link", templ.KV("active", App(ctx).Url()=="/products") }
-							hx-indicator="#pageLoading"
-							href="/products"
-							hx-get="/products"
-							hx-target="#pageHolder"
-							hx-replace-url="true"
-						>Products</a>
-					</li>
+					@navbarPageItem("/users", "Users")
+					@navbarPageItem("/products", "Products")
 					if App(ctx).IsAuth() {
 						<li class="nav-item">
 							<a class="nav-link" href="/logout">Logout</a>
 						</li>
 					} else {
-						<li class="nav-item">
-							<a
-								class={ "nav-link", templ.KV("active", App(ctx).Url()=="/signup") }
-								hx-indicator="#pageLoading"
-								href="/signup"
-								hx-get="/signup"
-								hx-target="#pageHolder"
-								hx-replace-url="true"
-							>Signup</a>
-						</li>
+						@navbarPageItem("/signup", "Signup")
 					}
 				</ul>
 			</div>
