@@ -15,7 +15,7 @@ templ Layout() {
 
 script updateActivePage(pageUrl string) {
 	document.querySelectorAll('#pageLinks .nav-item .nav-link').forEach(e => e.classList.remove('active'))
-    document.querySelector('#pageLinks .nav-item .nav-link[href="'+pageUrl+'"]').classList.add('active')
+    document.querySelectorAll('#pageLinks .nav-item .nav-link[href="'+pageUrl+'"]').forEach(e => e.classList.add('active'))
 }
 
 templ emptyLayout() {
@@ -250,7 +250,7 @@ templ navbarPageItem(url string, title string) {
 templ navbar() {
 	<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/" hx-get="/" hx-target="#pageHolder" hx-indicator="#pageLoading" hx-replace-url="true">Dashboard</a>
+			<a class="navbar-brand" href="/" hx-get="/" hx-target="#pageHolder" hx-indicator=".pageLoading" hx-replace-url="true">Dashboard</a>
 			<div class="app-indicator-opacity pageLoading">
 				<div class="spinner-border text-light" role="status">
 					<span class="visually-hidden">Loading...</span>
@@ -265,7 +265,7 @@ templ navbar() {
 							<a class="nav-link" href="/logout">Logout</a>
 						</li>
 					} else {
-						@navbarPageItem("/signup", "Signup")
+						@navbarPageItem("/signup", "Sign up")
 					}
 				</ul>
 			</div>

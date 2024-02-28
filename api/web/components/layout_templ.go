@@ -81,12 +81,12 @@ func Layout() templ.Component {
 
 func updateActivePage(pageUrl string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_updateActivePage_c71c`,
-		Function: `function __templ_updateActivePage_c71c(pageUrl){document.querySelectorAll('#pageLinks .nav-item .nav-link').forEach(e => e.classList.remove('active'))
-    document.querySelector('#pageLinks .nav-item .nav-link[href="'+pageUrl+'"]').classList.add('active')
+		Name: `__templ_updateActivePage_c463`,
+		Function: `function __templ_updateActivePage_c463(pageUrl){document.querySelectorAll('#pageLinks .nav-item .nav-link').forEach(e => e.classList.remove('active'))
+    document.querySelectorAll('#pageLinks .nav-item .nav-link[href="'+pageUrl+'"]').forEach(e => e.classList.add('active'))
 }`,
-		Call:       templ.SafeScript(`__templ_updateActivePage_c71c`, pageUrl),
-		CallInline: templ.SafeScriptInline(`__templ_updateActivePage_c71c`, pageUrl),
+		Call:       templ.SafeScript(`__templ_updateActivePage_c463`, pageUrl),
+		CallInline: templ.SafeScriptInline(`__templ_updateActivePage_c463`, pageUrl),
 	}
 }
 
@@ -285,7 +285,7 @@ func navbar() templ.Component {
 			templ_7745c5c3_Var13 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"navbar navbar-expand-md fixed-top navbar-dark bg-dark\"><div class=\"container-fluid\"><a class=\"navbar-brand\" href=\"/\" hx-get=\"/\" hx-target=\"#pageHolder\" hx-indicator=\"#pageLoading\" hx-replace-url=\"true\">Dashboard</a><div class=\"app-indicator-opacity pageLoading\"><div class=\"spinner-border text-light\" role=\"status\"><span class=\"visually-hidden\">Loading...</span></div></div><div class=\"collapse navbar-collapse\" id=\"navbarCollapse\"><ul class=\"navbar-nav me-auto mb-2 mb-md-0\" id=\"pageLinks\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"navbar navbar-expand-md fixed-top navbar-dark bg-dark\"><div class=\"container-fluid\"><a class=\"navbar-brand\" href=\"/\" hx-get=\"/\" hx-target=\"#pageHolder\" hx-indicator=\".pageLoading\" hx-replace-url=\"true\">Dashboard</a><div class=\"app-indicator-opacity pageLoading\"><div class=\"spinner-border text-light\" role=\"status\"><span class=\"visually-hidden\">Loading...</span></div></div><div class=\"collapse navbar-collapse\" id=\"navbarCollapse\"><ul class=\"navbar-nav me-auto mb-2 mb-md-0\" id=\"pageLinks\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -303,7 +303,7 @@ func navbar() templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = navbarPageItem("/signup", "Signup").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = navbarPageItem("/signup", "Sign up").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
