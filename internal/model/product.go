@@ -5,11 +5,11 @@ import (
 )
 
 type Product interface {
-	GetId() string
-	GetTitle() string
-	GetPrice() int
-	GetBrand() string
-	GetUserId() string
+	Id() string
+	Title() string
+	Price() int
+	Brand() string
+	UserId() string
 }
 
 type ProductRepository interface {
@@ -31,43 +31,53 @@ type UpdateProductArg struct {
 }
 
 type product struct {
+	state productState
+}
+
+type productState struct {
 	Id     string `gorm:"primaryKey"`
 	Title  string
 	Price  int
 	Brand  string
 	Info   string
 	UserId string
-	User   user `gorm:"references:Id"`
+	User   userState `gorm:"references:Id"`
 }
 
-func (p *product) GetId() string {
-	return p.Id
+func (productState) TableName() string {
+	return "product"
 }
 
-func (p *product) GetTitle() string {
-	return p.Title
+func (p *product) Id() string {
+	return p.state.Id
 }
 
-func (p *product) GetPrice() int {
-	return p.Price
+func (p *product) Title() string {
+	return p.state.Title
 }
 
-func (p *product) GetBrand() string {
-	return p.Brand
+func (p *product) Price() int {
+	return p.state.Price
 }
 
-func (p *product) GetUserId() string {
-	return p.UserId
+func (p *product) Brand() string {
+	return p.state.Brand
+}
+
+func (p *product) UserId() string {
+	return p.state.UserId
 }
 
 func NewProduct(userId string, title string, price int, brand string) Product {
 
 	return &product{
-		Id:     uuid.NewString(),
-		UserId: userId,
-		Title:  title,
-		Price:  price,
-		Brand:  brand,
-		Info:   title + " " + brand,
+		state: productState{
+			Id:     uuid.NewString(),
+			UserId: userId,
+			Title:  title,
+			Price:  price,
+			Brand:  brand,
+			Info:   title + " " + brand,
+		},
 	}
 }

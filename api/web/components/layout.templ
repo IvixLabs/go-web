@@ -219,7 +219,8 @@ templ fullLayout() {
 			<main class="container" id="pageHolder">
 				{ children... }
 			</main>
-			<script src="/static/main.js"></script>
+			// <script src={"/static/main.js?time="+strconv.FormatInt(time.Now().Unix(), 10)}></script>
+			<script src={"/static/main.js"}></script>
 		</body>
 	</html>
 }
@@ -267,6 +268,7 @@ templ navbar() {
 					} else {
 						@navbarPageItem("/signup", "Sign up")
 					}
+					// @navbarPageItem("/video", "Video")
 				</ul>
 			</div>
 			<button

@@ -10,6 +10,7 @@ import (
 	"ivixlabs.com/goweb/api/handlers"
 	"ivixlabs.com/goweb/api/handlers/product"
 	"ivixlabs.com/goweb/api/handlers/user"
+	"ivixlabs.com/goweb/api/handlers/video"
 	"ivixlabs.com/goweb/api/middleware"
 	productUseCase "ivixlabs.com/goweb/internal/product"
 	userUseCase "ivixlabs.com/goweb/internal/user"
@@ -20,7 +21,7 @@ import (
 var resources embed.FS
 
 func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
-	formValidator *form.Validator, productService productUseCase.Service, staticDir string) http.Handler {
+	formValidator *form.Validator, productService productUseCase.Service, staticDir string, developmentMode bool) http.Handler {
 	router := mux.NewRouter()
 
 	router.Use(middleware.GetContextMiddleware(sessionStore))
@@ -40,15 +41,29 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 		middleware.GretAuthMiddleware(product.GetSaveHandler(formValidator, productService).ServeHTTP, sessionStore)))
 	router.Handle("/products/delete", middleware.GretPreloadMiddleware(
 		middleware.GretAuthMiddleware(product.GetDeleteHandler(productService).ServeHTTP, sessionStore)))
+	router.HandleFunc("/video", middleware.GretPreloadMiddleware(
+		video.GetIndexHandlerFunc()))
+
+	router.HandleFunc("/video/room", video.GetRoomHandlerFunc())
+	router.HandleFunc("/video/room/ws", video.GetSignalHandlerFunc())
+	router.HandleFunc("/video/room/enter", video.GetEnterInRoomHandlerFunc())
 
 	resourceDir, err := fs.Sub(resources, "resources")
 	if err != nil {
 		panic(err)
 	}
 
+	var resourcesFS http.FileSystem
+
+	if developmentMode {
+		resourcesFS = http.Dir(staticDir)
+	} else {
+		resourcesFS = http.FS(resourceDir)
+	}
+
 	router.
 		PathPrefix("/static/").
-		Handler(http.StripPrefix("/static/", http.FileServer(http.FS(resourceDir))))
+		Handler(http.StripPrefix("/static/", http.FileServer(resourcesFS)))
 
 	return router
 }

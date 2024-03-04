@@ -15,19 +15,19 @@ func NewGormUserRepository(db *gorm.DB) UserRepository {
 }
 
 func (repo *gormUserRepository) SaveUser(u User) {
-	pStruct := (u).(*user)
-	repo.db.Create(pStruct)
+	uStruct := (u).(*user)
+	repo.db.Create(uStruct.state)
 }
 
 func (repo *gormUserRepository) FindAllUsers() []User {
 
-	var userArr []user
+	var userArr []userState
 
 	repo.db.Find(&userArr)
 
 	result := make([]User, len(userArr))
 	for i, userItem := range userArr {
-		result[i] = &userItem
+		result[i] = &user{state: userItem}
 	}
 
 	return result
@@ -35,7 +35,7 @@ func (repo *gormUserRepository) FindAllUsers() []User {
 
 func (repo *gormUserRepository) FindUserByEmail(email string) User {
 
-	var userObj user
+	var userObj userState
 
 	tx := repo.db.Where("email=?", email).First(&userObj)
 
@@ -43,5 +43,5 @@ func (repo *gormUserRepository) FindUserByEmail(email string) User {
 		return nil
 	}
 
-	return &userObj
+	return &user{state: userObj}
 }

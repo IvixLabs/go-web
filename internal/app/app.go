@@ -17,7 +17,7 @@ import (
 	userValidation "ivixlabs.com/goweb/internal/validation/user"
 )
 
-func Run(addr string, staticDir string, dbUrl string, sessionsDir string) {
+func Run(addr string, staticDir string, dbUrl string, sessionsDir string, developmentMode bool) {
 	sessionStore := sessions.NewFilesystemStore(sessionsDir, []byte("abc123"))
 
 	gormDb := gorm.NewGormDb(dbUrl)
@@ -34,7 +34,7 @@ func Run(addr string, staticDir string, dbUrl string, sessionsDir string) {
 	userValidation.InitEmailValidation(formValidator, userService)
 
 	router := httpController.NewRouter(sessionStore,
-		userService, formValidator, productService, staticDir)
+		userService, formValidator, productService, staticDir, developmentMode)
 
 	httpServer := internalHttp.NewServer(addr, router)
 	httpServer.Start()

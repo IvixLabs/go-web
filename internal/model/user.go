@@ -5,10 +5,10 @@ import (
 )
 
 type User interface {
-	GetId() string
-	GetEmail() string
-	GetAddress() string
-	GetPassword() string
+	Id() string
+	Email() string
+	Address() string
+	Password() string
 }
 
 type UserRepository interface {
@@ -17,33 +17,45 @@ type UserRepository interface {
 	FindUserByEmail(email string) User
 }
 
-type user struct {
+type userState struct {
 	Id       string `gorm:"primaryKey"`
 	Email    string
 	Address  string
 	Password string
 }
 
-func (u *user) GetId() string {
-	return u.Id
+func (userState) TableName() string {
+	return "user"
 }
 
-func (u *user) GetEmail() string {
-	return u.Email
+type user struct {
+	state userState
 }
 
-func (u *user) GetAddress() string {
-	return u.Address
+func (u *user) Id() string {
+	return u.state.Id
 }
 
-func (u *user) GetPassword() string { return u.Password }
+func (u *user) Email() string {
+	return u.state.Email
+}
+
+func (u *user) Address() string {
+	return u.state.Address
+}
+
+func (u *user) Password() string {
+	return u.state.Password
+}
 
 func NewUser(email string, password string, address string) User {
 
 	return &user{
-		Id:       uuid.NewString(),
-		Email:    email,
-		Password: password,
-		Address:  address,
+		state: userState{
+			Id:       uuid.NewString(),
+			Email:    email,
+			Password: password,
+			Address:  address,
+		},
 	}
 }

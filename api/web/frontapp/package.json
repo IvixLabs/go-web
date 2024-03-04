@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "webpack --mode=development"
+    "build": "webpack --mode=development",
+    "watch": "webpack --watch --progress --mode=development"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",

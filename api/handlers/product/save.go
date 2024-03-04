@@ -25,13 +25,13 @@ func GetSaveHandler(formValidator *form.Validator, productService product2.Servi
 			appContext := context.GetApp(r.Context())
 			userId := appContext.GetUserId()
 
-			if productObj == nil || productObj.GetUserId() != userId {
+			if productObj == nil || productObj.UserId() != userId {
 				panic("Product is not found")
 			}
 
-			productForm.Title = productObj.GetTitle()
-			productForm.Brand = productObj.GetBrand()
-			productForm.Price = strconv.Itoa(productObj.GetPrice())
+			productForm.Title = productObj.Title()
+			productForm.Brand = productObj.Brand()
+			productForm.Price = strconv.Itoa(productObj.Price())
 		}
 
 		var err error
@@ -57,7 +57,7 @@ func GetSaveHandler(formValidator *form.Validator, productService product2.Servi
 					app := context.GetApp(r.Context())
 
 					productObj = productService.CreateNewProduct(&productForm, app.GetUserId())
-					productId = productObj.GetId()
+					productId = productObj.Id()
 				}
 
 				w.Header().Set("HX-Trigger", "UpdateProductsTable,CloseProductFormModal")

@@ -15,8 +15,8 @@ templ List(users []model.User) {
 			<tbody>
 				for _, user := range users {
 					<tr>
-						<td>{ user.GetId() }</td>
-						<td>{ user.GetEmail() }</td>
+						<td>{ user.Id() }</td>
+						<td>{ user.Email() }</td>
 					</tr>
 				}
 			</tbody>

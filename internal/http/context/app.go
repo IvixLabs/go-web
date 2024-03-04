@@ -13,18 +13,17 @@ type App struct {
 	Response      http.ResponseWriter
 }
 
-func (context *App) getSession() *sessions.Session {
-	session, err := context.SessionsStore.Get(context.Request, "user")
-	if err != nil {
-		panic(err)
-	}
-
-	return session
+func (context *App) getSession() (*sessions.Session, error) {
+	return context.SessionsStore.Get(context.Request, "user")
 }
 
 func (context *App) IsAuth() bool {
 	if context.SessionsStore != nil {
-		session := context.getSession()
+		session, err := context.getSession()
+		if err != nil {
+			return false
+		}
+
 		_, ok := session.Values["userId"]
 		return ok
 	}
@@ -34,7 +33,11 @@ func (context *App) IsAuth() bool {
 
 func (context *App) GetUserId() string {
 	if context.SessionsStore != nil {
-		session := context.getSession()
+		session, err := context.getSession()
+		if err != nil {
+			panic(err)
+		}
+
 		userId, ok := session.Values["userId"]
 		if !ok {
 			panic("No userid")
@@ -46,9 +49,13 @@ func (context *App) GetUserId() string {
 }
 
 func (context *App) SaveRedirectUrl(url string) {
-	session := context.getSession()
+	session, err := context.getSession()
+	if err != nil {
+		panic(err)
+	}
+
 	session.Values["redirectUrl"] = url
-	err := session.Save(context.Request, context.Response)
+	err = session.Save(context.Request, context.Response)
 	if err != nil {
 		panic(err)
 	}
@@ -56,10 +63,14 @@ func (context *App) SaveRedirectUrl(url string) {
 
 func (context *App) Login(userId string) {
 
-	session := context.getSession()
+	session, err := context.getSession()
+	if err != nil {
+		panic(err)
+	}
+
 	session.Values["userId"] = userId
 
-	err := session.Save(context.Request, context.Response)
+	err = session.Save(context.Request, context.Response)
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +78,11 @@ func (context *App) Login(userId string) {
 
 func (context *App) GetRedirectUrl() string {
 
-	session := context.getSession()
+	session, err := context.getSession()
+	if err != nil {
+		panic(err)
+	}
+
 	url, ok := session.Values["redirectUrl"]
 
 	if ok {
@@ -76,7 +91,7 @@ func (context *App) GetRedirectUrl() string {
 		url = "/"
 	}
 
-	err := session.Save(context.Request, context.Response)
+	err = session.Save(context.Request, context.Response)
 	if err != nil {
 		panic(err)
 	}
@@ -86,10 +101,14 @@ func (context *App) GetRedirectUrl() string {
 
 func (context *App) Logout() {
 
-	session := context.getSession()
+	session, err := context.getSession()
+	if err != nil {
+		return
+	}
+
 	delete(session.Values, "userId")
 
-	err := session.Save(context.Request, context.Response)
+	err = session.Save(context.Request, context.Response)
 	if err != nil {
 		panic(err)
 	}

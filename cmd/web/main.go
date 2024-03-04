@@ -35,5 +35,11 @@ func main() {
 		port = "8080"
 	}
 
-	app.Run(":"+port, staticDir, dbUrl, sessionsDir)
+	developmentMode := false
+	strDevelopmentMode := os.Getenv("DEVELOPMENT_MODE")
+	if strDevelopmentMode != "" {
+		developmentMode = true
+	}
+
+	app.Run(":"+port, staticDir, dbUrl, sessionsDir, developmentMode)
 }

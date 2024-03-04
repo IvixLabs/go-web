@@ -14,7 +14,7 @@ func GetAuthLevelValidator(userService user.Service) validator.StructLevelFunc {
 		userObj := userService.FindByEmail(authForm.Email)
 
 		if userObj != nil {
-			if userObj.GetPassword() != authForm.Password {
+			if userObj.Password() != authForm.Password {
 				sl.ReportError(authForm.Email, "Email", "Email", "user_wrong_password", "")
 			}
 		} else {

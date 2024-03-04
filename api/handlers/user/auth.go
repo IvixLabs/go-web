@@ -35,7 +35,7 @@ func GetAuthHandlerFunc(userService user.Service, formValidator *form.Validator,
 				userObj := userService.FindByEmail(authForm.Email)
 
 				appContext := context.GetApp(r.Context())
-				appContext.Login(userObj.GetId())
+				appContext.Login(userObj.Id())
 
 				w.Header().Set("HX-Redirect", appContext.GetRedirectUrl())
 			}
