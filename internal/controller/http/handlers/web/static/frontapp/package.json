@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch --progress --mode=development"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "css-loader": "^6.10.0",
+    "htmx.org": "^1.9.10",
+    "hyperscript.org": "^0.9.12",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

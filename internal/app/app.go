@@ -19,6 +19,7 @@ import (
 
 func Run(addr string, staticDir string, dbUrl string, sessionsDir string, developmentMode bool) {
 	sessionStore := sessions.NewFilesystemStore(sessionsDir, []byte("abc123"))
+	sessionStore.MaxAge(3600)
 
 	gormDb := gorm.NewGormDb(dbUrl)
 

@@ -1,0 +1,48 @@
+package user
+
+import (
+	"ivixlabs.com/goweb/internal/controller/http/template"
+	"ivixlabs.com/goweb/internal/validation/form"
+	"ivixlabs.com/goweb/internal/user/auth"
+)
+
+templ Auth(form *auth.Form, formErrors *form.Errors) {
+	@template.Layout() {
+		@authForm(form, formErrors)
+	}
+}
+
+templ authForm(form *auth.Form, formErrors *form.Errors) {
+	<form hx-post="/auth" hx-swap="outerHTML" _="on submit toggle @disabled on #formFields">
+		<fieldset id="formFields">
+			<div class="mb-3">
+				<label for="inputEmail4" class="form-label">Email</label>
+				<input
+					type="text"
+					value={ form.Email }
+					class={ template.GetClass(formErrors.IsError("Email")) }
+					name="email"
+					id="inputEmail4"
+				/>
+				@templ.Raw(template.GetErrorMessage(formErrors, "Email"))
+			</div>
+			<div class="mb-3">
+				<label for="inputUserPassword" class="form-label">Password</label>
+				<input
+					type="password"
+					value={ form.Password }
+					class={ template.GetClass(formErrors.IsError("Password")) }
+					name="password"
+					id="inputUserPassword"
+				/>
+				@templ.Raw(template.GetErrorMessage(formErrors, "Password"))
+			</div>
+			<button type="submit" class="btn btn-primary">
+				<span class="app-indicator">
+					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+				</span>
+				Sign in
+			</button>
+		</fieldset>
+	</form>
+}
