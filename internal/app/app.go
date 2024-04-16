@@ -1,6 +1,11 @@
 package app
 
 import (
+	"ivixlabs.com/goweb/internal/clickhouse"
+	product2 "ivixlabs.com/goweb/internal/gorm/repository/product"
+	"ivixlabs.com/goweb/internal/gorm/repository/property"
+	user2 "ivixlabs.com/goweb/internal/gorm/repository/user"
+	"ivixlabs.com/goweb/internal/model/product/usecase"
 	"log"
 	"os"
 	"os/signal"
@@ -11,31 +16,59 @@ import (
 	"ivixlabs.com/goweb/internal/gorm"
 	internalHttp "ivixlabs.com/goweb/internal/http"
 	"ivixlabs.com/goweb/internal/model"
-	"ivixlabs.com/goweb/internal/product"
+	"ivixlabs.com/goweb/internal/model/product"
 	"ivixlabs.com/goweb/internal/user"
 	"ivixlabs.com/goweb/internal/validation/form"
 	userValidation "ivixlabs.com/goweb/internal/validation/user"
 )
 
-func Run(addr string, staticDir string, dbUrl string, sessionsDir string, developmentMode bool) {
+func Run(
+	addr string,
+	staticDir string,
+	dbUrl string,
+	sessionsDir string,
+	developmentMode bool,
+	clickhouseAddr []string,
+) {
 	sessionStore := sessions.NewFilesystemStore(sessionsDir, []byte("abc123"))
 	sessionStore.MaxAge(3600)
 
 	gormDb := gorm.NewGormDb(dbUrl)
 
-	model.GormInitModels(gormDb)
+	//model.GormInitModels(gormDb)
+	gorm.InitModels(gormDb)
 
-	userRepository := model.NewGormUserRepository(gormDb)
+	userRepository := user2.New(gormDb)
 	userService := user.NewService(userRepository)
 
-	productRepository := model.NewGormProductRepository(gormDb)
+	productRepository := product2.New(gormDb)
+	productCreation := usecase.NewProductCreation(productRepository)
+	productUpdating := usecase.NewProductUpdating(productRepository)
 	productService := product.NewService(productRepository)
+
+	propertyRepository := property.New(gormDb)
 
 	formValidator := form.NewValidator()
 	userValidation.InitEmailValidation(formValidator, userService)
 
-	router := httpController.NewRouter(sessionStore,
-		userService, formValidator, productService, staticDir, developmentMode)
+	clickhouseConn := clickhouse.NewConn(clickhouseAddr)
+	entityPropertyRepo := model.NewClickHouseEntityPropertyRepository(clickhouseConn)
+	entityRepo := model.NewClickHouseEntityRepository(clickhouseConn, entityPropertyRepo)
+
+	router := httpController.NewRouter(
+		sessionStore,
+		userService,
+		formValidator,
+		productCreation,
+		productUpdating,
+		productRepository,
+		productService,
+		staticDir,
+		developmentMode,
+		propertyRepository,
+		entityRepo,
+		entityPropertyRepo,
+	)
 
 	httpServer := internalHttp.NewServer(addr, router)
 	httpServer.Start()

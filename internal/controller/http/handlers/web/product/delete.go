@@ -5,10 +5,10 @@ import (
 
 	"ivixlabs.com/goweb/internal/controller/http/template/product"
 	"ivixlabs.com/goweb/internal/http/context"
-	product2 "ivixlabs.com/goweb/internal/product"
+	product2 "ivixlabs.com/goweb/internal/model/product"
 )
 
-func GetDeleteHandler(productService product2.Service) http.HandlerFunc {
+func GetDeleteHandler(productRepository product2.Repository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		productId := r.URL.Query().Get("productId")
@@ -22,7 +22,7 @@ func GetDeleteHandler(productService product2.Service) http.HandlerFunc {
 			appContext := context.GetApp(r.Context())
 			userId := appContext.GetUserId()
 
-			num := productService.DeleteProduct(productId, userId)
+			num := productRepository.DeleteProduct(productId, userId)
 			if num > 0 {
 				w.Header().Set("HX-Trigger", "UpdateProductsTable,CloseProductDeleteModal")
 			}

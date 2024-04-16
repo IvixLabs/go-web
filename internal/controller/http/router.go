@@ -1,24 +1,40 @@
 package http
 
 import (
+	"ivixlabs.com/goweb/internal/controller/http/handlers/api/entity"
+	"ivixlabs.com/goweb/internal/controller/http/handlers/api/property"
 	userApi "ivixlabs.com/goweb/internal/controller/http/handlers/api/user"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/web"
+	"ivixlabs.com/goweb/internal/controller/http/handlers/web/dashboard"
+	"ivixlabs.com/goweb/internal/controller/http/handlers/web/front"
 	productWeb "ivixlabs.com/goweb/internal/controller/http/handlers/web/product"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/web/static"
 	userWeb "ivixlabs.com/goweb/internal/controller/http/handlers/web/user"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/web/video"
 	"ivixlabs.com/goweb/internal/controller/http/middleware"
+	"ivixlabs.com/goweb/internal/model"
+	"ivixlabs.com/goweb/internal/model/product/usecase"
+	property2 "ivixlabs.com/goweb/internal/model/property"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	productUseCase "ivixlabs.com/goweb/internal/product"
+	productModel "ivixlabs.com/goweb/internal/model/product"
 	userUseCase "ivixlabs.com/goweb/internal/user"
 	"ivixlabs.com/goweb/internal/validation/form"
 )
 
 func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
-	formValidator *form.Validator, productService productUseCase.Service, staticDir string, developmentMode bool) http.Handler {
+	formValidator *form.Validator,
+	productCreation usecase.ProductCreation,
+	productUpdating usecase.ProductUpdating,
+	productRepository productModel.Repository,
+	productService productModel.Service,
+	staticDir string,
+	developmentMode bool,
+	propertyRepository property2.Repository,
+	entityRepository model.EntityRepository,
+	entityPropertyRepository model.EntityPropertyRepository) http.Handler {
 	router := mux.NewRouter()
 
 	router.Use(middleware.GetContextMiddleware(sessionStore))
@@ -35,9 +51,9 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	router.Handle("/products", middleware.GretPreloadMiddleware(
 		middleware.GretAuthMiddleware(productWeb.GetListHandler(productService))))
 	router.Handle("/products/form", middleware.GretPreloadMiddleware(
-		middleware.GretAuthMiddleware(productWeb.GetSaveHandler(formValidator, productService))))
+		middleware.GretAuthMiddleware(productWeb.GetSaveHandler(formValidator, productRepository, productUpdating, productCreation))))
 	router.Handle("/products/delete", middleware.GretPreloadMiddleware(
-		middleware.GretAuthMiddleware(productWeb.GetDeleteHandler(productService))))
+		middleware.GretAuthMiddleware(productWeb.GetDeleteHandler(productRepository))))
 	router.Handle("/video", middleware.GretPreloadMiddleware(
 		video.GetIndexHandler()))
 
@@ -45,7 +61,18 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	router.Handle("/video/room/ws", video.GetSignalHandler())
 	router.Handle("/video/room/enter", video.GetEnterInRoomHandler())
 
-	router.Handle("/api/user/list", userApi.GetListHandler(userService))
+	router.Handle("/api/user/list", middleware.GetCorsMiddleware(userApi.GetListHandler(userService)))
+	router.Handle("/dashboard", dashboard.GetDashboardHandler())
+	router.Handle("/front1", front.GetFrontHandler())
+
+	router.Handle("/api/property/create", middleware.GetCorsMiddleware(property.GetCreateHandler(propertyRepository, formValidator)))
+	router.Handle("/api/property/delete", middleware.GetCorsMiddleware(property.GetDeleteHandler(propertyRepository)))
+	router.Handle("/api/property/list", middleware.GetCorsMiddleware(property.GetListHandler(propertyRepository)))
+
+	router.Handle("/api/entity/list", middleware.GetCorsMiddleware(
+		entity.GetListHandler(entityRepository, entityPropertyRepository)))
+	router.Handle("/api/entity/save", middleware.GetCorsMiddleware(
+		entity.GetSaveHandler(entityRepository)))
 
 	router.
 		PathPrefix("/static/").

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"ivixlabs.com/goweb/internal/http/context"
-	product3 "ivixlabs.com/goweb/internal/product"
+	product3 "ivixlabs.com/goweb/internal/model/product"
 )
 
 func GetListHandler(productService product3.Service) http.Handler {

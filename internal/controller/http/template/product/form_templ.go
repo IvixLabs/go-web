@@ -12,7 +12,7 @@ import "bytes"
 
 import (
 	"ivixlabs.com/goweb/internal/controller/http/template"
-	"ivixlabs.com/goweb/internal/product"
+	"ivixlabs.com/goweb/internal/model/product"
 	"ivixlabs.com/goweb/internal/validation/form"
 )
 

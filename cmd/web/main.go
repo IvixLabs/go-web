@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"ivixlabs.com/goweb/internal/app"
 )
@@ -41,5 +43,22 @@ func main() {
 		developmentMode = true
 	}
 
-	app.Run(":"+port, staticDir, dbUrl, sessionsDir, developmentMode)
+	clickhouseHost := os.Getenv("CLICKHOUSE_HOST")
+	if clickhouseHost == "" {
+		clickhouseHost = "localhost"
+	}
+
+	var clickhousePort uint64 = 9000
+	strClickhousePort := os.Getenv("CLICKHOUSE_PORT")
+	if strClickhousePort != "" {
+		var err error
+		clickhousePort, err = strconv.ParseUint(strClickhousePort, 10, 32)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	clickhouseAddr := []string{fmt.Sprintf("%s:%d", clickhouseHost, clickhousePort)}
+
+	app.Run(":"+port, staticDir, dbUrl, sessionsDir, developmentMode, clickhouseAddr)
 }

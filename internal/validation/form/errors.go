@@ -3,6 +3,7 @@ package form
 import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	"strings"
 )
 
 type Errors struct {
@@ -43,4 +44,21 @@ func (form *Errors) IsError(name string) bool {
 	}
 
 	return false
+}
+
+func (form *Errors) GetErrorsDto() map[string][]string {
+
+	finalErrors := make(map[string][]string)
+
+	if form.errors == nil {
+		return finalErrors
+	}
+
+	for _, err := range *form.errors {
+		field := err.Field()
+
+		finalErrors[strings.ToLower(string(field[0]))+field[1:]] = append(finalErrors[field], err.Translate(form.translator))
+	}
+
+	return finalErrors
 }

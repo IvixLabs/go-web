@@ -1,11 +1,11 @@
 package user
 
 import (
-	"ivixlabs.com/goweb/internal/model"
+	"ivixlabs.com/goweb/internal/model/user"
 	"ivixlabs.com/goweb/internal/controller/http/template"
 )
 
-templ List(users []model.User) {
+templ List(users []user.User) {
 	@template.Layout() {
 		<table class="table">
 			<thead>

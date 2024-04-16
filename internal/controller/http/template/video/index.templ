@@ -11,29 +11,29 @@ templ IndexView() {
 		<input type="hidden" value={ uuid.NewString() } id="uuid"/>
 		<div class="d-flex flex-column gap-2">
 			<div class="d-flex gap-2">
-			    <button class="btn btn-primary" type="button" id="startButton">Start</button>
-			    <button class="btn btn-danger d-none" type="button" id="recordButton">Record</button>
-			    <button class="btn btn-danger d-none" type="button" id="stopButton">Stop</button>
+				<button class="btn btn-primary" type="button" id="startButton">Start</button>
+				<button class="btn btn-danger d-none" type="button" id="recordButton">Record</button>
+				<button class="btn btn-danger d-none" type="button" id="stopButton">Stop</button>
 			</div>
 			<div class="d-flex gap-2">
-			    <select class="form-select" id="selectCamera"></select>
-			    <select class="form-select"id="selectResolution">
-				<option select>320x240</option>
-				<option>640x480</option>
-				<option>1280x720</option>
-				<option>1920x1080</option>
-				<option>3840x2160</option>
-			    </select>
+				<select class="form-select" id="selectCamera"></select>
+				<select class="form-select" id="selectResolution">
+					<option select>320x240</option>
+					<option>640x480</option>
+					<option>1280x720</option>
+					<option>1920x1080</option>
+					<option>3840x2160</option>
+				</select>
 			</div>
-		<div class="d-flex gap-2 flex-wrap">
-			<video id="localVideo" autoplay controls></video>
-			<video id="remoteVideo" autoplay controls></video>
+			<div class="d-flex gap-2 flex-wrap">
+				<video id="localVideo" autoplay controls></video>
+				<video id="remoteVideo" autoplay controls></video>
+			</div>
+			<div id="msgChat"></div>
+			<div class="d-flex gap-2">
+				<input class="form-control" id="msgInput" type="text"/><button id="msgButton" class="btn btn-primary">Send</button>
+			</div>
 		</div>
-		<div id="msgChat"></div>
-		<div class="d-flex gap-2">
-		    <input class="form-control" id="msgInput" type="text"/><button id="msgButton" class="btn btn-primary">Send</button>
-		</div>
-		</div>
-		<script src={"/static/video.bundle.js"}></script>
+		<script src={ "/static/video.bundle.js" }></script>
 	}
 }

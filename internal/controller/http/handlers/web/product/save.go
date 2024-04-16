@@ -2,26 +2,30 @@ package product
 
 import (
 	"ivixlabs.com/goweb/internal/controller/http/template/product"
+	productModel "ivixlabs.com/goweb/internal/model/product"
+	"ivixlabs.com/goweb/internal/model/product/usecase"
 	"net/http"
 	"strconv"
 
 	"ivixlabs.com/goweb/internal/http/context"
-	"ivixlabs.com/goweb/internal/model"
-	product2 "ivixlabs.com/goweb/internal/product"
+	product2 "ivixlabs.com/goweb/internal/model/product"
 	"ivixlabs.com/goweb/internal/validation/form"
 )
 
-func GetSaveHandler(formValidator *form.Validator, productService product2.Service) http.Handler {
+func GetSaveHandler(formValidator *form.Validator,
+	productRepository product2.Repository,
+	productUpdating usecase.ProductUpdating,
+	productCreation usecase.ProductCreation) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		productForm := product2.Form{}
 		formErrors := &form.Errors{}
 		productId := r.URL.Query().Get("productId")
 
-		var productObj model.Product
+		var productObj productModel.Product
 
 		if productId != "" {
-			productObj = productService.FindById(productId)
+			productObj = productRepository.FindProductById(productId)
 			appContext := context.GetApp(r.Context())
 			userId := appContext.GetUserId()
 
@@ -52,11 +56,11 @@ func GetSaveHandler(formValidator *form.Validator, productService product2.Servi
 			if formErrors, ok = formValidator.ValidateForm(&productForm); ok {
 
 				if productObj != nil {
-					productService.UpdateProduct(&productForm, productObj)
+					productUpdating.UpdateProduct(&productForm, productObj)
 				} else {
 					app := context.GetApp(r.Context())
 
-					productObj = productService.CreateNewProduct(&productForm, app.GetUserId())
+					productObj = productCreation.CreateNewProduct(&productForm, app.GetUserId())
 					productId = productObj.Id()
 				}
 

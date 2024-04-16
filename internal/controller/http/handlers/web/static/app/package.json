@@ -1,0 +1,29 @@
+{
+  "scripts": {
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch --progress --mode=development",
+    "tailwindcss_watch": "npx tailwindcss -i ./front.css -o ./front_out.css --watch"
+  },
+  "dependencies": {
+    "@types/react": "^18.2.65",
+    "@types/react-dom": "^18.2.21",
+    "bootstrap": "^5.3.3",
+    "css-loader": "^6.10.0",
+    "htmx.org": "^1.9.10",
+    "hyperscript.org": "^0.9.12",
+    "primeflex": "^3.3.1",
+    "primeicons": "^6.0.1",
+    "primereact": "^10.5.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "tailwindcss": "^3.4.3",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.2"
+  }
+}

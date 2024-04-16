@@ -1,12 +1,12 @@
 package product
 
 import (
-	"ivixlabs.com/goweb/internal/model"
+	"ivixlabs.com/goweb/internal/model/product"
 	"ivixlabs.com/goweb/internal/controller/http/template"
 	"strconv"
 )
 
-templ ListView(products []model.Product) {
+templ ListView(products []product.Product) {
 	@template.Layout() {
 		<a
 			href="/products/form"
@@ -20,7 +20,7 @@ templ ListView(products []model.Product) {
 	}
 }
 
-templ ProductTableView(products []model.Product) {
+templ ProductTableView(products []product.Product) {
 	<table class="table" hx-swap="outerHTML" hx-trigger="UpdateProductsTable from:body" hx-get="/products?tableOnly">
 		<thead>
 			<th scope="col">Title</th>
