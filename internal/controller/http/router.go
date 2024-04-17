@@ -41,8 +41,6 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 
 	router.Handle("/signup", middleware.GretPreloadMiddleware(
 		userWeb.GetSignupHandler(userService, formValidator)))
-	router.Handle("/users", middleware.GretPreloadMiddleware(
-		middleware.GretAuthMiddleware(userWeb.GetListHandler(userService))))
 	router.Handle("/auth", middleware.GretPreloadMiddleware(
 		userWeb.GetAuthHandler(userService, formValidator)))
 	router.Handle("/logout", userWeb.GetLogoutHandler())
