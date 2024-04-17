@@ -1,6 +1,7 @@
 package http
 
 import (
+	productApi "ivixlabs.com/goweb/internal/controller/http/handlers/api/product"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/api/property"
 	userApi "ivixlabs.com/goweb/internal/controller/http/handlers/api/user"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/web"
@@ -59,6 +60,9 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	router.Handle("/video/room/enter", video.GetEnterInRoomHandler())
 
 	router.Handle("/api/user/list", middleware.GetCorsMiddleware(userApi.GetListHandler(userService)))
+
+	router.Handle("/api/product/list", middleware.GetCorsMiddleware(productApi.GetListHandler(productService)))
+
 	router.Handle("/dashboard", dashboard.GetDashboardHandler())
 	router.Handle("/front1", front.GetFrontHandler())
 

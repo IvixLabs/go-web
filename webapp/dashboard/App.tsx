@@ -4,10 +4,12 @@ import {createContext, ReactNode, useCallback, useContext, useEffect, useRef, us
 import {Button} from 'primereact/button';
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
-import {confirmDialog, ConfirmDialog} from "primereact/confirmdialog";
+import {confirmDialog} from "primereact/confirmdialog";
 import {InputText} from "primereact/inputtext";
 import {Card} from "primereact/card";
 import {Message} from "primereact/message";
+import UserListPage from "./UserListPage";
+import ProductListPage from "./ProductListPage";
 
 
 async function apiGetProperties() {
@@ -204,7 +206,6 @@ function PropertyTable({}: PropertyTableProps) {
                        onClick={async () => deleteProperty(value.id)}>Delete</Button>
     }
 
-    console.log("PropertyTable RENDER")
     return <DataTable value={properties} size="small">
         <Column field="id" header="Id"/>
         <Column field="name" header="Name"/>
@@ -268,13 +269,16 @@ export default function App() {
         })
     }
 
-    console.log("APP render")
     return (
         <div>
             <AppProviders>
-                <PropertyPage/>
-                <Button onClick={confirm1} icon="pi pi-check" label="Confirm"></Button>
-                <ConfirmDialog/>
+                {/*<PropertyPage/>*/}
+                {/*<Button onClick={confirm1} icon="pi pi-check" label="Confirm"></Button>*/}
+                {/*<ConfirmDialog/>*/}
+                <div className="flex flex-column gap-2">
+                    <ProductListPage></ProductListPage>
+                    <UserListPage></UserListPage>
+                </div>
             </AppProviders>
 
         </div>
