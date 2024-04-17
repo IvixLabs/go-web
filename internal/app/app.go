@@ -1,7 +1,6 @@
 package app
 
 import (
-	"ivixlabs.com/goweb/internal/clickhouse"
 	product2 "ivixlabs.com/goweb/internal/gorm/repository/product"
 	"ivixlabs.com/goweb/internal/gorm/repository/property"
 	user2 "ivixlabs.com/goweb/internal/gorm/repository/user"
@@ -15,7 +14,6 @@ import (
 	httpController "ivixlabs.com/goweb/internal/controller/http"
 	"ivixlabs.com/goweb/internal/gorm"
 	internalHttp "ivixlabs.com/goweb/internal/http"
-	"ivixlabs.com/goweb/internal/model"
 	"ivixlabs.com/goweb/internal/model/product"
 	"ivixlabs.com/goweb/internal/user"
 	"ivixlabs.com/goweb/internal/validation/form"
@@ -28,7 +26,6 @@ func Run(
 	dbUrl string,
 	sessionsDir string,
 	developmentMode bool,
-	clickhouseAddr []string,
 ) {
 	sessionStore := sessions.NewFilesystemStore(sessionsDir, []byte("abc123"))
 	sessionStore.MaxAge(3600)
@@ -51,10 +48,6 @@ func Run(
 	formValidator := form.NewValidator()
 	userValidation.InitEmailValidation(formValidator, userService)
 
-	clickhouseConn := clickhouse.NewConn(clickhouseAddr)
-	entityPropertyRepo := model.NewClickHouseEntityPropertyRepository(clickhouseConn)
-	entityRepo := model.NewClickHouseEntityRepository(clickhouseConn, entityPropertyRepo)
-
 	router := httpController.NewRouter(
 		sessionStore,
 		userService,
@@ -66,8 +59,6 @@ func Run(
 		staticDir,
 		developmentMode,
 		propertyRepository,
-		entityRepo,
-		entityPropertyRepo,
 	)
 
 	httpServer := internalHttp.NewServer(addr, router)

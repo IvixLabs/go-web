@@ -30,6 +30,6 @@ module.exports = {
     output: {
         asyncChunks: true,
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, '../resources'),
+        path: path.resolve(__dirname, '../internal/controller/http/handlers/web/static/resources'),
     },
 };

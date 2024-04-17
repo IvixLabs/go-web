@@ -13,6 +13,7 @@ type Product interface {
 	Price() int
 	Brand() string
 	UserId() string
+	Update(updateProduct *UpdateProductDto)
 }
 
 type product struct {
@@ -53,6 +54,24 @@ func (p *product) UserId() string {
 	return p.State().UserId
 }
 
+func (p *product) Update(updateProduct *UpdateProductDto) {
+	state := p.State()
+
+	if updateProduct.IsTitle {
+		state.Title = updateProduct.Title
+	}
+
+	if updateProduct.IsBrand {
+		state.Brand = updateProduct.Brand
+	}
+
+	if updateProduct.IsPrice {
+		state.Price = updateProduct.Price
+	}
+
+	p.UpdateState(state)
+}
+
 func FromState(state State) Product {
 	p := &product{}
 	p.UpdateState(state)
@@ -69,4 +88,13 @@ func New(userId string, title string, price int, brand string) Product {
 		Brand:  brand,
 		Info:   title + " " + brand,
 	})
+}
+
+type UpdateProductDto struct {
+	Title   string
+	IsTitle bool
+	Price   int
+	IsPrice bool
+	Brand   string
+	IsBrand bool
 }

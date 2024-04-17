@@ -56,11 +56,18 @@ func GetSaveHandler(formValidator *form.Validator,
 			if formErrors, ok = formValidator.ValidateForm(&productForm); ok {
 
 				if productObj != nil {
-					productUpdating.UpdateProduct(&productForm, productObj)
+					err = productUpdating.UpdateProduct(&productForm, productObj)
+					if err != nil {
+						panic(err)
+					}
 				} else {
 					app := context.GetApp(r.Context())
 
-					productObj = productCreation.CreateNewProduct(&productForm, app.GetUserId())
+					productObj, err = productCreation.CreateNewProduct(&productForm, app.GetUserId())
+					if err != nil {
+						panic(err)
+					}
+
 					productId = productObj.Id()
 				}
 

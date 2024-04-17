@@ -1,7 +1,6 @@
 package http
 
 import (
-	"ivixlabs.com/goweb/internal/controller/http/handlers/api/entity"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/api/property"
 	userApi "ivixlabs.com/goweb/internal/controller/http/handlers/api/user"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/web"
@@ -12,7 +11,6 @@ import (
 	userWeb "ivixlabs.com/goweb/internal/controller/http/handlers/web/user"
 	"ivixlabs.com/goweb/internal/controller/http/handlers/web/video"
 	"ivixlabs.com/goweb/internal/controller/http/middleware"
-	"ivixlabs.com/goweb/internal/model"
 	"ivixlabs.com/goweb/internal/model/product/usecase"
 	property2 "ivixlabs.com/goweb/internal/model/property"
 	"net/http"
@@ -33,8 +31,7 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	staticDir string,
 	developmentMode bool,
 	propertyRepository property2.Repository,
-	entityRepository model.EntityRepository,
-	entityPropertyRepository model.EntityPropertyRepository) http.Handler {
+) http.Handler {
 	router := mux.NewRouter()
 
 	router.Use(middleware.GetContextMiddleware(sessionStore))
@@ -68,11 +65,6 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	router.Handle("/api/property/create", middleware.GetCorsMiddleware(property.GetCreateHandler(propertyRepository, formValidator)))
 	router.Handle("/api/property/delete", middleware.GetCorsMiddleware(property.GetDeleteHandler(propertyRepository)))
 	router.Handle("/api/property/list", middleware.GetCorsMiddleware(property.GetListHandler(propertyRepository)))
-
-	router.Handle("/api/entity/list", middleware.GetCorsMiddleware(
-		entity.GetListHandler(entityRepository, entityPropertyRepository)))
-	router.Handle("/api/entity/save", middleware.GetCorsMiddleware(
-		entity.GetSaveHandler(entityRepository)))
 
 	router.
 		PathPrefix("/static/").

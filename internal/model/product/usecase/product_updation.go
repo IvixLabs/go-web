@@ -2,11 +2,10 @@ package usecase
 
 import (
 	"ivixlabs.com/goweb/internal/model/product"
-	"strconv"
 )
 
 type ProductUpdating interface {
-	UpdateProduct(form *product.Form, p product.Product)
+	UpdateProduct(form *product.Form, p product.Product) error
 }
 
 type productUpdatingUseCase struct {
@@ -17,21 +16,17 @@ func NewProductUpdating(productRepository product.Repository) ProductUpdating {
 	return &productUpdatingUseCase{productRepository}
 }
 
-func (pu *productUpdatingUseCase) UpdateProduct(form *product.Form, p product.Product) {
+func (pu *productUpdatingUseCase) UpdateProduct(form *product.Form, p product.Product) error {
 
-	price, err := strconv.Atoi(form.Price)
+	updateP, err := form.GetUpdateProductDto()
+
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	updateP := product.UpdateProductArg{
-		Title:   form.Title,
-		IsTitle: true,
-		Brand:   form.Brand,
-		IsBrand: true,
-		Price:   price,
-		IsPrice: true,
-	}
+	p.Update(updateP)
 
-	pu.productRepository.UpdateProduct(p, &updateP)
+	pu.productRepository.UpdateProduct(p)
+
+	return nil
 }

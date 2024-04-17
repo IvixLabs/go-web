@@ -15,7 +15,7 @@ func New(db *gorm.DB) product.Repository {
 	return &repository{db: db}
 }
 
-func (repo *repository) Create(p product.Product) {
+func (repo *repository) CreateProduct(p product.Product) {
 	repo.db.Create(p.State())
 }
 
@@ -46,22 +46,8 @@ func (repo *repository) FindProductById(productId string) product.Product {
 	return product.FromState(productState)
 }
 
-func (repo *repository) UpdateProduct(p product.Product, updateProduct *product.UpdateProductArg) {
-	state := p.State()
-
-	if updateProduct.IsTitle {
-		state.Title = updateProduct.Title
-	}
-
-	if updateProduct.IsBrand {
-		state.Brand = updateProduct.Brand
-	}
-
-	if updateProduct.IsPrice {
-		state.Price = updateProduct.Price
-	}
-
-	repo.db.Save(state)
+func (repo *repository) UpdateProduct(p product.Product) {
+	repo.db.Save(p.State())
 }
 
 func (repo *repository) DeleteProduct(id string, userId string) int64 {

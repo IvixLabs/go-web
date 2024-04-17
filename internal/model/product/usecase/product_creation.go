@@ -2,11 +2,11 @@ package usecase
 
 import (
 	"ivixlabs.com/goweb/internal/model/product"
-	"strconv"
 )
 
+//go:generate mockery --name ProductCreation
 type ProductCreation interface {
-	CreateNewProduct(form *product.Form, userId string) product.Product
+	CreateNewProduct(form *product.Form, userId string) (product.Product, error)
 }
 
 type productCreationUseCase struct {
@@ -17,15 +17,16 @@ func NewProductCreation(productRepository product.Repository) ProductCreation {
 	return &productCreationUseCase{productRepository}
 }
 
-func (p *productCreationUseCase) CreateNewProduct(form *product.Form, userId string) product.Product {
+func (p *productCreationUseCase) CreateNewProduct(form *product.Form, userId string) (product.Product, error) {
 
-	price, err := strconv.Atoi(form.Price)
+	dto, err := form.GetUpdateProductDto()
+
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	productObj := product.New(userId, form.Title, price, form.Brand)
-	p.productRepository.Create(productObj)
+	productObj := product.New(userId, form.Title, dto.Price, form.Brand)
+	p.productRepository.CreateProduct(productObj)
 
-	return productObj
+	return productObj, nil
 }
