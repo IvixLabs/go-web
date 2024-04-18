@@ -16,7 +16,7 @@ func New(db *gorm.DB) user.Repository {
 }
 
 func (repo *repository) SaveUser(u user.User) {
-	repo.db.Create(u.State())
+	repo.db.Save(u.State())
 }
 
 func (repo *repository) FindAllUsers() []user.User {
@@ -44,4 +44,23 @@ func (repo *repository) FindUserByEmail(email string) user.User {
 	}
 
 	return user.FromState(userObj)
+}
+
+func (repo *repository) GetUserById(userId string) (user.User, error) {
+	var userObj user.State
+
+	tx := repo.db.Where("id=?", userId).First(&userObj)
+
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+		return nil, tx.Error
+	}
+
+	return user.FromState(userObj), nil
+}
+
+func (repo *repository) DeleteUserById(userId string) {
+	tx := repo.db.Delete(&user.State{}, "id=?", userId)
+	if tx.Error != nil {
+		panic(tx.Error)
+	}
 }

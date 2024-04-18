@@ -11,6 +11,7 @@ type User interface {
 	Email() string
 	Address() string
 	Password() string
+	Update(updateDto *UpdateDto)
 }
 
 type State struct {
@@ -44,6 +45,20 @@ func (u *user) Password() string {
 	return u.State().Password
 }
 
+func (u *user) Update(updateDto *UpdateDto) {
+	state := u.State()
+
+	if updateDto.IsAddress {
+		state.Address = updateDto.Address
+	}
+
+	if updateDto.IsPassword {
+		state.Password = updateDto.Password
+	}
+
+	u.UpdateState(state)
+}
+
 func FromState(state State) User {
 	u := &user{}
 	u.UpdateState(state)
@@ -59,4 +74,11 @@ func New(email string, password string, address string) User {
 		Address:  address,
 	})
 
+}
+
+type UpdateDto struct {
+	Address    string
+	IsAddress  bool
+	Password   string
+	IsPassword bool
 }

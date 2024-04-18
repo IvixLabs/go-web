@@ -2,7 +2,6 @@ package app
 
 import (
 	product2 "ivixlabs.com/goweb/internal/gorm/repository/product"
-	"ivixlabs.com/goweb/internal/gorm/repository/property"
 	user2 "ivixlabs.com/goweb/internal/gorm/repository/user"
 	"ivixlabs.com/goweb/internal/model/product/usecase"
 	"log"
@@ -43,8 +42,6 @@ func Run(
 	productUpdating := usecase.NewProductUpdating(productRepository)
 	productService := product.NewService(productRepository)
 
-	propertyRepository := property.New(gormDb)
-
 	formValidator := form.NewValidator()
 	userValidation.InitEmailValidation(formValidator, userService)
 
@@ -58,7 +55,7 @@ func Run(
 		productService,
 		staticDir,
 		developmentMode,
-		propertyRepository,
+		userRepository,
 	)
 
 	httpServer := internalHttp.NewServer(addr, router)

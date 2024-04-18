@@ -8,8 +8,7 @@ import {confirmDialog} from "primereact/confirmdialog";
 import {InputText} from "primereact/inputtext";
 import {Card} from "primereact/card";
 import {Message} from "primereact/message";
-import UserListPage from "./UserListPage";
-import ProductListPage from "./ProductListPage";
+import {NavLink, Outlet, useLocation, useNavigate} from "react-router-dom";
 
 
 async function apiGetProperties() {
@@ -258,7 +257,20 @@ function PropertyPage() {
     </Card>
 }
 
+export function RedirectToUsers() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate("/dashboard/users")
+    }, []);
+
+    return <></>
+}
+
 export default function App() {
+
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const confirm1 = function () {
         confirmDialog({
@@ -269,18 +281,34 @@ export default function App() {
         })
     }
 
+    const navLinkClass = function (props: { isActive: boolean }) {
+        const {isActive} = props
+        const baseClass = " no-underline line-height-3 cursor-pointer"
+
+        if (isActive) {
+            return "text-900 " + baseClass
+        }
+        return "text-500 " + baseClass
+    }
+
     return (
         <div>
             <AppProviders>
-                {/*<PropertyPage/>*/}
-                {/*<Button onClick={confirm1} icon="pi pi-check" label="Confirm"></Button>*/}
-                {/*<ConfirmDialog/>*/}
                 <div className="flex flex-column gap-2">
-                    <ProductListPage></ProductListPage>
-                    <UserListPage></UserListPage>
+                    <ul className="list-none p-0 m-0 flex align-items-center font-medium mb-3">
+                        <li className="p-2">
+                            <NavLink to="users" className={navLinkClass}>Users</NavLink>
+                        </li>
+                        <li className="p-2">
+                            <NavLink to="products" className={navLinkClass}>Products</NavLink>
+                        </li>
+                    </ul>
+                    <Outlet/>
                 </div>
             </AppProviders>
 
         </div>
+
+
     )
 }

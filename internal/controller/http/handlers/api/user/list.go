@@ -15,14 +15,10 @@ func GetListHandler(userService user.Service) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		ret := make([]map[string]string, len(users))
+		ret := make([]*Dto, len(users))
 
 		for userIndex, userItem := range users {
-			ret[userIndex] = map[string]string{
-				"id":      userItem.Id(),
-				"email":   userItem.Email(),
-				"address": userItem.Address(),
-			}
+			ret[userIndex] = GetUserDto(userItem)
 		}
 
 		err := json.NewEncoder(w).Encode(ret)
