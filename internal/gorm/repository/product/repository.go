@@ -2,9 +2,8 @@ package product
 
 import (
 	"errors"
-	"ivixlabs.com/goweb/internal/model/product"
-
 	"gorm.io/gorm"
+	"ivixlabs.com/goweb/internal/model/product"
 )
 
 type repository struct {
@@ -23,7 +22,7 @@ func (repo *repository) FindAllProducts() []product.Product {
 
 	var productArr []product.State
 
-	repo.db.Find(&productArr)
+	repo.db.Preload("User").Find(&productArr)
 
 	result := make([]product.Product, len(productArr))
 	for i, productItem := range productArr {
@@ -37,7 +36,7 @@ func (repo *repository) FindProductById(productId string) product.Product {
 
 	var productState product.State
 
-	tx := repo.db.First(&productState, "id=?", productId)
+	tx := repo.db.Preload("User").First(&productState, "id=?", productId)
 
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 		return nil
@@ -47,7 +46,7 @@ func (repo *repository) FindProductById(productId string) product.Product {
 }
 
 func (repo *repository) UpdateProduct(p product.Product) {
-	repo.db.Save(p.State())
+	repo.db.Omit("User").Save(p.State())
 }
 
 func (repo *repository) DeleteProduct(id string, userId string) int64 {
@@ -67,4 +66,27 @@ func (repo *repository) FindProductsByUserId(userId string) []product.Product {
 	}
 
 	return result
+}
+
+func (repo *repository) GetProductById(productId string) (product.Product, error) {
+	var productState product.State
+
+	tx := repo.db.Where("id=?", productId).First(&productState)
+
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+		return nil, tx.Error
+	}
+
+	return product.FromState(productState), nil
+}
+
+func (repo *repository) DeleteProductById(productId string) {
+	tx := repo.db.Delete(&product.State{}, "id=?", productId)
+	if tx.Error != nil {
+		panic(tx.Error)
+	}
+}
+
+func (repo *repository) SaveProduct(p product.Product) {
+	repo.db.Save(p.State())
 }

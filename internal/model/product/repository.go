@@ -8,4 +8,7 @@ type Repository interface {
 	UpdateProduct(ps Product)
 	DeleteProduct(id string, userId string) int64
 	FindProductsByUserId(userId string) []Product
+	GetProductById(productId string) (Product, error)
+	DeleteProductById(userId string)
+	SaveProduct(p Product)
 }

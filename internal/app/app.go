@@ -4,6 +4,7 @@ import (
 	product2 "ivixlabs.com/goweb/internal/gorm/repository/product"
 	user2 "ivixlabs.com/goweb/internal/gorm/repository/user"
 	"ivixlabs.com/goweb/internal/model/product/usecase"
+	product3 "ivixlabs.com/goweb/internal/validation/product"
 	"log"
 	"os"
 	"os/signal"
@@ -44,6 +45,7 @@ func Run(
 
 	formValidator := form.NewValidator()
 	userValidation.InitEmailValidation(formValidator, userService)
+	product3.InitUserValidation(formValidator, userRepository)
 
 	router := httpController.NewRouter(
 		sessionStore,

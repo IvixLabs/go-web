@@ -10,7 +10,7 @@ import 'primeicons/primeicons.css'; //icons
 import './dashboard.css'
 import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import UserListPage from "./dashboard/UserListPage";
-import ProductListPage from "./dashboard/ProductListPage";
+import ProductListPage from "./dashboard/product/ProductListPage";
 
 
 const router = createBrowserRouter([

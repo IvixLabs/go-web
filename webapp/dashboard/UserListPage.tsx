@@ -78,7 +78,7 @@ export default function UserListPage() {
     return <>
         <UserContext.Provider value={{userId, setUserId, loadUsers, users, isNewUser, setIsNewUser, apiDeleteUser}}>
             <Card>
-                <Button onClick={() => setIsNewUser(true)}>Create new user</Button>
+                <Button className="mb-2" onClick={() => setIsNewUser(true)}>Create new user</Button>
                 <UserTable/>
             </Card>
             <Dialog header="User form" onHide={hideDialogHandler} visible={userId !== undefined}>

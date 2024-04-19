@@ -13,6 +13,7 @@ type Product interface {
 	Price() int
 	Brand() string
 	UserId() string
+	User() user.User
 	Update(updateProduct *UpdateProductDto)
 }
 
@@ -52,6 +53,9 @@ func (p *product) Brand() string {
 
 func (p *product) UserId() string {
 	return p.State().UserId
+}
+func (p *product) User() user.User {
+	return user.FromState(p.State().User)
 }
 
 func (p *product) Update(updateProduct *UpdateProductDto) {

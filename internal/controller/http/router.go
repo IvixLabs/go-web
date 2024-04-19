@@ -102,6 +102,10 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 
 	productRouter := apiRouter.PathPrefix("/products").Subrouter()
 	productRouter.Handle("/", productApi.GetListHandler(productService)).Methods("GET")
+	productRouter.Handle("/{id}", productApi.GetGetHandler(productRepository)).Methods("GET")
+	productRouter.Handle("/{id}", productApi.GetDeleteHandler(productRepository)).Methods("DELETE")
+	productRouter.Handle("/", productApi.GetCreateHandler(productRepository, formValidator)).Methods("POST")
+	productRouter.Handle("/{id}", productApi.GetUpdateHandler(productRepository, formValidator)).Methods("PUT")
 
 	dashboardHandler := middleware.GetBasicAuthHandler(
 		dashboard.GetDashboardHandler(),
