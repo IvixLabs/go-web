@@ -2,7 +2,9 @@ package user
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"ivixlabs.com/goweb/internal/model/user"
+	"log"
 	"net/http"
 )
 
@@ -10,7 +12,10 @@ func GetGetHandler(userRepository user.Repository) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		userId := r.URL.Query().Get("userId")
+		log.Println(r.URL.Path)
+
+		params := mux.Vars(r)
+		userId := params["id"]
 
 		userObj, err := userRepository.GetUserById(userId)
 

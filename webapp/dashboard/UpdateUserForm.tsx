@@ -5,49 +5,8 @@ import * as React from "react";
 import {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
 import UserContext from "./UserContext";
 import {Message} from "primereact/message";
+import {apiGetUser, apiUpdateEntity, FormError, UpdateUserDto} from "./userApi";
 
-
-async function apiGetUser(userId: string): Promise<UpdateUserDto> {
-    const res = await fetch("/api/user?userId=" + userId)
-    if (!res.ok) {
-        throw new Error('Failed to fetch data')
-    }
-
-    return res.json()
-}
-
-async function apiPutEntity(user: UpdateUserDto) {
-    const res = await fetch("/api/user", {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(user)
-    })
-
-    if (!res.ok) {
-        if (res.status === 400) {
-            throw new FormError(await res.json())
-        }
-
-        throw new Error('Failed to fetch data')
-    }
-
-    return res.json()
-}
-
-class FormError {
-    errors: { [key: string]: string[] }
-
-    constructor(errors: any) {
-        this.errors = errors;
-    }
-}
-
-interface UpdateUserDto {
-    id: string
-    email: string
-    password: string
-    address: string
-}
 
 function NewUpdateUserDto(): UpdateUserDto {
     return {id: "", password: "", address: "", email: ""}
@@ -72,7 +31,7 @@ export default function UpdateUserForm() {
     const saveUser = async function (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         try {
-            await apiPutEntity(updateUser)
+            await apiUpdateEntity(updateUser)
             setUserId(undefined)
             await loadUsers()
         } catch (e) {

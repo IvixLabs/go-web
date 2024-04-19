@@ -2,6 +2,7 @@ package user
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"ivixlabs.com/goweb/internal/model/user"
 	"ivixlabs.com/goweb/internal/model/user/dto"
 	"ivixlabs.com/goweb/internal/validation/form"
@@ -30,7 +31,10 @@ func GetUpdateHandler(userRepository user.Repository, formValidator *form.Valida
 			return
 		}
 
-		userEntity, err := userRepository.GetUserById(updateForm.Id)
+		params := mux.Vars(r)
+		userId := params["id"]
+
+		userEntity, err := userRepository.GetUserById(userId)
 		if err != nil {
 			panic(err)
 		}

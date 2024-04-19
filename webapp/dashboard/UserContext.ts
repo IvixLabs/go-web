@@ -1,10 +1,7 @@
 import {createContext} from "react";
+import {UserListItem} from "./userApi";
 
-export interface UserListItem {
-    id: string
-    email: string
-    address: string
-}
+
 
 export interface UserContextValue {
     userId?: string,

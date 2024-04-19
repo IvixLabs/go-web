@@ -88,55 +88,22 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	//router.Handle("/video/room/ws", video.GetSignalHandler())
 	//router.Handle("/video/room/enter", video.GetEnterInRoomHandler())
 
-	router.Handle("/api/user/list",
-		middleware.GetBasicAuthMiddleware(
-			middleware.GetCorsMiddleware(
-				userApi.GetListHandler(userService),
-			),
-		),
-	).Methods("GET")
+	apiRouter := router.PathPrefix("/api").Subrouter()
+	apiRouter.Use(middleware.GetBasicAuthMiddleware())
+	apiRouter.Use(middleware.GetCorsMiddleware())
 
-	router.Handle("/api/user",
-		middleware.GetBasicAuthMiddleware(
-			middleware.GetCorsMiddleware(
-				userApi.GetGetHandler(userRepository),
-			),
-		),
-	).Methods("GET")
+	userRouter := apiRouter.PathPrefix("/users").Subrouter()
 
-	router.Handle("/api/user",
-		middleware.GetBasicAuthMiddleware(
-			middleware.GetCorsMiddleware(
-				userApi.GetUpdateHandler(userRepository, formValidator),
-			),
-		),
-	).Methods("PUT")
+	userRouter.Handle("/", userApi.GetListHandler(userService)).Methods("GET")
+	userRouter.Handle("/{id}", userApi.GetGetHandler(userRepository)).Methods("GET")
+	userRouter.Handle("/{id}", userApi.GetUpdateHandler(userRepository, formValidator)).Methods("PUT")
+	userRouter.Handle("/", userApi.GetCreateHandler(userRepository, formValidator)).Methods("POST")
+	userRouter.Handle("/{id}", userApi.GetDeleteHandler(userRepository)).Methods("DELETE")
 
-	router.Handle("/api/user",
-		middleware.GetBasicAuthMiddleware(
-			middleware.GetCorsMiddleware(
-				userApi.GetCreateHandler(userRepository, formValidator),
-			),
-		),
-	).Methods("POST")
+	productRouter := apiRouter.PathPrefix("/products").Subrouter()
+	productRouter.Handle("/", productApi.GetListHandler(productService)).Methods("GET")
 
-	router.Handle("/api/user",
-		middleware.GetBasicAuthMiddleware(
-			middleware.GetCorsMiddleware(
-				userApi.GetDeleteHandler(userRepository),
-			),
-		),
-	).Methods("DELETE")
-
-	router.Handle("/api/product/list",
-		middleware.GetBasicAuthMiddleware(
-			middleware.GetCorsMiddleware(
-				productApi.GetListHandler(productService),
-			),
-		),
-	)
-
-	dashboardHandler := middleware.GetBasicAuthMiddleware(
+	dashboardHandler := middleware.GetBasicAuthHandler(
 		dashboard.GetDashboardHandler(),
 	)
 
@@ -145,9 +112,9 @@ func NewRouter(sessionStore sessions.Store, userService userUseCase.Service,
 	router.Handle("/dashboard/{webapp}", dashboardHandler)
 
 	//router.Handle("/front1", front.GetFrontHandler())
-	//router.Handle("/api/property/create", middleware.GetCorsMiddleware(property.GetUpdateHandler(propertyRepository, formValidator)))
-	//router.Handle("/api/property/delete", middleware.GetCorsMiddleware(property.GetDeleteHandler(propertyRepository)))
-	//router.Handle("/api/property/list", middleware.GetCorsMiddleware(property.GetListHandler(propertyRepository)))
+	//router.Handle("/api/property/create", middleware.GetCorsHandler(property.GetUpdateHandler(propertyRepository, formValidator)))
+	//router.Handle("/api/property/delete", middleware.GetCorsHandler(property.GetDeleteHandler(propertyRepository)))
+	//router.Handle("/api/property/list", middleware.GetCorsHandler(property.GetListHandler(propertyRepository)))
 
 	router.
 		PathPrefix("/static/").

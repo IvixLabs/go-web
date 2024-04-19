@@ -2,7 +2,7 @@ package middleware
 
 import "net/http"
 
-func GetCorsMiddleware(next http.Handler) http.Handler {
+func GetCorsHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 
@@ -11,4 +11,10 @@ func GetCorsMiddleware(next http.Handler) http.Handler {
 
 			next.ServeHTTP(w, r)
 		})
+}
+
+func GetCorsMiddleware() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return GetCorsHandler(next)
+	}
 }

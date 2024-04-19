@@ -6,9 +6,14 @@ import (
 	"net/http"
 )
 
-func GetBasicAuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func GetBasicAuthMiddleware() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return GetBasicAuthHandler(next)
+	}
+}
 
+func GetBasicAuthHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, pass, ok := r.BasicAuth()
 		if ok {
 			username := sha256.Sum256([]byte("admin"))

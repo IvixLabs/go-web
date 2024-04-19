@@ -2,6 +2,7 @@ package user
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"ivixlabs.com/goweb/internal/model/user"
 	"net/http"
 )
@@ -10,7 +11,8 @@ func GetDeleteHandler(userRepository user.Repository) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		userId := r.URL.Query().Get("userId")
+		params := mux.Vars(r)
+		userId := params["id"]
 
 		userRepository.DeleteUserById(userId)
 

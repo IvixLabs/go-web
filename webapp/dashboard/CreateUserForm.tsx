@@ -5,38 +5,8 @@ import * as React from "react";
 import {ChangeEvent, FormEvent, useContext, useState} from "react";
 import UserContext from "./UserContext";
 import {Message} from "primereact/message";
+import {apiCreateEntity, CreateUserDto, FormError} from "./userApi";
 
-async function apiPostEntity(user: CreateUserDto) {
-    const res = await fetch("/api/user", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(user)
-    })
-
-    if (!res.ok) {
-        if (res.status === 400) {
-            throw new FormError(await res.json())
-        }
-
-        throw new Error('Failed to fetch data')
-    }
-
-    return res.json()
-}
-
-class FormError {
-    errors: {[key:string]:string[]}
-
-    constructor(errors: any) {
-        this.errors = errors;
-    }
-}
-
-interface CreateUserDto {
-    email: string
-    password: string
-    address: string
-}
 
 function NewCreateUserDto(): CreateUserDto {
     return {email: "", password: "", address: ""}
@@ -51,7 +21,7 @@ export default function CreateUserForm() {
     const saveUser = async function (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         try {
-            await apiPostEntity(createUser)
+            await apiCreateEntity(createUser)
             setIsNewUser(false)
             await loadUsers()
         } catch (e) {

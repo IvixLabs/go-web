@@ -4,27 +4,14 @@ import {Card} from "primereact/card";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import UpdateUserForm from "./UpdateUserForm";
-import UserContext, {UserListItem} from "./UserContext";
+import UserContext from "./UserContext";
 import {Dialog} from "primereact/dialog";
 import CreateUserForm from "./CreateUserForm";
 import {Button} from "primereact/button";
 import {ConfirmDialog} from "primereact/confirmdialog";
+import {apiDeleteUser, apiGetUsers, UserListItem} from "./userApi";
 
-async function apiGetUsers(): Promise<UserListItem[]> {
-    const res = await fetch("/api/user/list")
-    if (!res.ok) {
-        throw new Error('Failed to fetch data')
-    }
 
-    return res.json()
-}
-
-async function apiDeleteUser(userId: string) {
-    const res = await fetch("/api/user?userId=" + userId, {
-        method: "DELETE",
-        headers: {"Content-Type": "application/json"},
-    })
-}
 
 
 function UserTable() {
