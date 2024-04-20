@@ -5,6 +5,12 @@ Backend part is written on go+gorm it provides session auth for frontside and ba
 For sessions storage filesystem used. For db sqlite used.
 
 
+## Live url
+
+https://godash.fly.dev - frontside/userside
+
+https://godash.fly.dev/dashboard - adminside
+
 ## How to run locally
 
 - You need to have docker.
@@ -23,3 +29,23 @@ For sessions storage filesystem used. For db sqlite used.
 - http://localhost:8080 - frontside
 - http://localhost:8080/dashboard - adminside admin:admin
 
+## Development
+
+All commands better run in separated console
+
+### Run tailwind css generator watch
+
+`cd webapp`
+`npm run tailwindcss_watch`
+
+### Run webapp watch
+
+`cd webapp`
+`npm run watch`
+
+
+### Run go app recompiler
+
+`~/go/bin/air`
+
+Usually air path is ~/go/bin/air 
