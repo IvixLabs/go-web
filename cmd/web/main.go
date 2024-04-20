@@ -13,11 +13,6 @@ func main() {
 		panic("No db url")
 	}
 
-	staticDir := os.Getenv("STATIC_DIR")
-	if staticDir == "" {
-		panic("No static dir")
-	}
-
 	sessionsDir := os.Getenv("SESSIONS_DIR")
 	if sessionsDir == "" {
 		panic("No sessions dir")
@@ -38,6 +33,14 @@ func main() {
 	strDevelopmentMode := os.Getenv("DEVELOPMENT_MODE")
 	if strDevelopmentMode != "" {
 		developmentMode = true
+	}
+
+	staticDir := ""
+	if developmentMode {
+		staticDir = os.Getenv("STATIC_DIR")
+		if staticDir == "" {
+			panic("No static dir")
+		}
 	}
 
 	app.Run(":"+port, staticDir, dbUrl, sessionsDir, developmentMode)

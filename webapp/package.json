@@ -2,7 +2,8 @@
   "scripts": {
     "build": "webpack --mode=production",
     "watch": "webpack --watch --progress --mode=development",
-    "tailwindcss_watch": "npx tailwindcss -i ./front.css -o ./front_out.css --watch"
+    "tailwindcss_build": "npx tailwindcss -i ./web.css -o ./web_out.css",
+    "tailwindcss_watch": "npx tailwindcss -i ./web.css -o ./web_out.css --watch"
   },
   "dependencies": {
     "@types/react": "^18.2.65",
