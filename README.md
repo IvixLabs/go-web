@@ -9,7 +9,7 @@ For sessions storage filesystem used. For db sqlite used.
 
 https://godash.fly.dev - frontside/userside
 
-https://godash.fly.dev/dashboard - adminside
+https://godash.fly.dev/dashboard - adminside admin:admin
 
 ## How to run locally
 
